@@ -1,0 +1,377 @@
+\documentclass{article}
+\usepackage{amsmath, amssymb, amsthm, amsfonts, bm}
+\theoremstyle{remark}
+\newtheorem*{theorem}{Theorem}
+\newtheorem*{remark}{Remark}
+\newtheorem*{definition}{Definition}
+\newtheorem*{hypothesis}{Hypothesis}
+\newtheorem*{corollary}{Corollary}
+\theoremstyle{remark}
+
+\usepackage{physics}
+\usepackage[a4paper, total={6in,10in}]{geometry}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{hyperref}
+    \hypersetup{colorlinks=true, linkcolor=ForestGreen}
+\usepackage{graphicx}
+    \graphicspath{{./img/}}
+\usepackage{tikz}
+\usepackage{ragged2e}
+
+\usepackage{cellspace} 
+\newcolumntype{L}[1]{>{\centering\arraybackslash}m{#1}}
+\usepackage{makecell}
+\setlength{\cellspacetoplimit}{6pt}
+\setlength{\cellspacebottomlimit}{6pt}
+
+\usepackage{soul}
+\everymath{\displaystyle}
+
+\newcommand{\where}[1]{\begin{flushright}where #1.\end{flushright}}
+\newcommand{\wher}[1]{\begin{flushright}#1.\end{flushright}}
+\newcommand{\mylabel}[2]{\hyperref[#1]{#2}\label{back:#1}}
+\newcommand{\myref}[1]{\hyperref[back:#1]{$\bigstar$}\label{#1}}
+\newcommand{\e}{\hat{\vb{e}}}  % unit vector
+\newcommand{\realp}[1]{\mathfrak{R}(#1)}
+\begin{document}
+
+\subsection*{Experimental methods}
+\begin{enumerate}
+    \item Uncertainty principle in signal processing (purely mathematical) $\textcolor{red}{\Delta f\Delta t=2\pi}$, $\Delta t$ is time-window/total sample time.
+    \item $E^2=p^2c^2+m_0^2c^4$ because $p=\gamma m_0 v$, $E=\gamma m_0 c^2$
+    \item Johnson-Nyquist noise: current/voltage fluctuation in resistor due to thermal fluctuations
+        \[
+            V_{\text{RMS}}=\sqrt{4k_BTR\Delta f}
+        \]
+        \where{$R$ is resistance,\\
+                $\Delta f$ is measurement bandwidth}
+    \item Golden rule\begin{itemize}
+            \item Gain $G$ is infinite
+            \item \includegraphics*[width=0.35\linewidth]{op-amp.png}
+            \item Input impedance $Z_{in}=\pdv{V_{in}}{I_{in}}$ is $\infty$
+            \item Output impedance $Z_{out}=\pdv{V_{out}}{I_{out}}$ is 0
+            \item The input $I_-$ is 0 (because $Z_{in}$ is infinite)
+            \item $V_-=V_+$ (only if not saturated, \textbf{negative feedback} established)\\
+                (A question on positive feedback \& saturated op-amp, results in oscillating output)
+        \end{itemize}
+    \item Non-ideal op-amp\begin{itemize}
+            \item $V_{out}=G(V_+-V_-)$
+            \item Gain $G$ not infinite, $10^4\sim 10^6$
+            \item $Z_{in}$ not infinite, $Z_{out}$ not 0
+            \item Gain $G$ is complex and function of frequency
+            \item Finite slew rate $\pdv{V_{out}}{t}$
+            \item An input bias current independent of $V_{in}$
+            \item An output bias voltage independent of $(V_+-V_-)$
+        \end{itemize}
+    \item \begin{itemize}
+        \item Sd of a set of numbers: $\sqrt{\frac{1}{N}\sum_i(x_i-\overline{x})^2}$
+        \item Estimated Sd of a population, if $\overline{x}$ is also estimated here $\sqrt{\frac{1}{N-1}\sum_i(x_i-\overline{x})^2}$ (\href{https://gregorygundersen.com/blog/2019/01/11/bessel/}{Bessel's correction})
+        \item Uncertainty/Sd in mean = $\frac{\sum\text{uncertainty of each measurement}}{\sqrt{N}}$
+        \item Gaussian error propagation $\sigma_f^2=\left(\pdv{f}{x}\right)^2\sigma_x^2+\left(\pdv{f}{y}\right)^2\sigma_y^2$
+    \end{itemize}
+    \item Noise\begin{itemize}
+            \item White noise (Johnson-Nyquist, shot noise, thermal fluctuations)
+            \item $1/f$-noise/pink noise, worst at low frequency/DC
+            \item $1/f^2$-noise/Brownian noise, random walk
+        \end{itemize}
+    \item Eliminating noise\begin{itemize}
+            \item Filter out $1/f$ noise, high pass filter (Switch on and off, if DC)
+            \item $1/f$ noise, phase sensitive detection with high $\omega$
+            \item Differential experiment, measure change $\Delta f=f_1-f_2$
+            \item Shielding (Electromagnetism, heat)
+            \item Eliminate source\begin{itemize}
+                \item Remote - away from electricity interference/vibration
+                \item High - above atmosphere
+                \item Antarctic - Dry/High/Cold
+                \item Space - All above and gravity free
+            \end{itemize}
+        \end{itemize}
+    \item Phase-sensitive detection - eliminate $1/f$ nosie\begin{itemize}
+            \item \includegraphics*[width=0.6\linewidth]{phase_sensitive_detection.png}
+            \item Modulator at frequency $\omega_r$, left $\cos(\omega_r t+\phi)$, right $\cos(\omega_r t)$
+            \item Signal $V_s$, noise $V_n=V_n(\omega)$
+            \item At 1, $V_1=V_s G\sin(\omega t+\phi)$
+            \item At 3, $V_3=V_s G\sin(\omega t+\phi)\sin(\omega t)=\frac{V_s G}{2}[\cos(\phi)-\cos(2\omega t+\phi)]$
+            \item $\langle V_3\rangle=\frac{V_s G}{2}\cos(\phi)$
+            \item At green arrow and op-amp, noise of frequency $\omega_n$ produced
+            \item $\langle V_n\rangle$ not zero if $\omega=\omega_n$
+            \item Set $\omega$ high, so noise is small
+        \end{itemize}
+    \item Mechanical vibration - air cushion\\
+        Thermal noise - reduce radiation/convection/evaporation - a lid, shiny shielding\\
+        Circuits - \includegraphics*[width=0.6\linewidth]{circuits.png}
+    \item \begin{itemize}
+        \item Binomial $P(r,p,N) = \frac{N!}{r!(N-r)!}p^r(1-p)^{N-1}$, $\sum_{r=0}^N P(r)=1$, $\langle r\rangle=Np$, $Var(r)=Np(1-p)$
+        \item Poisson $\frac{\lambda^r}{r!}e^{-\lambda}$, mean=\textbf{variance}=$\lambda$\\(shot noise, let $p\rightarrow 0$, $N\rightarrow\infty, \langle r\rangle=\lambda$)
+        \item Gaussian $\frac{1}{\sigma\sqrt{2\pi}}e^{-(x-\mu)^2/2\sigma^2}$, mean $\mu$, variance $\sigma^2$\\
+            1,2,3 sd - \textcolor{red}{68,95,99.7\%}\\
+            (Johnson noise, thermal fluctuations, $\sim k_B T$)
+        \item Chi-square $\chi^2(x,n)=\begin{cases}
+                \frac{1}{2^{n/2}\Gamma(n/2)}x^{n/2-1}e^{-x/2},&\ \qif x>0\\
+                0&\ \qotherwise
+            \end{cases},$\\ degree of freedom $n$, \textcolor{red}{mean $n$, variance $2n$}.
+    \end{itemize}
+    \item Likelihood $\prod_i p(y_i|\vb{a})$ should be maximized
+    \item $a$ is parameter(s)
+    \item Posterior $p(a|\text{data})=p(\text{data}|a)\frac{p(a)}{p(\text{data})}$, $p(a)$ is prior. ($p(\text{data})$ is a normalizing constant)
+    \item Choise of prior\begin{itemize}
+            \item uniform in log space, $p(a)=1/a$
+            \item uniform $p(a)=\text{constant}$, \textcolor{red}{most common} so $p(\text{param}|\text{data})=p(\text{data}|\text{param})$
+            \item Better, complicated assumption
+        \end{itemize}
+    \item Straight line fitting, constant prior\begin{itemize}
+            \item $p(y_i|a)=\frac{1}{\sigma\sqrt{2\pi}}e^{-(y_i-f(x_i|a))^2/2\sigma_i^2}$
+            \item $L(\vb{y}|a)=\prod_i^n p(y_i|a)$
+            \item to maximize $\ln(L)$, minimize $\chi^2=\sum_i\left(\frac{y_i-f(x_i|a)}{\sigma_i}\right)^2$
+            \item $f(x_i|a)=mx_i+c$, $a=\vb{a}=m, c$
+            \item $\pdv{\chi^2}{c}=0=\frac{1}{N}\pdv{\chi^2}{c}=\frac{1}{N}(-2)\sum_i y_i-(mx_i+c)\implies\overline{y}=m\overline{x}+c$
+            \item $\pdv{\chi^2}{m}=0=\frac{1}{N}\pdv{\chi^2}{m}=\frac{1}{N}(-2)\sum_i x_i(y_i-mx_i-c)\implies\overline{xy}=m\overline{x^2}+c\overline{x}$
+            \item $m=\frac{\overline{xy}-\overline{x}\overline{y}}{\overline{xx}-\overline{x}\overline{x}}=\frac{Cov(x,y)}{Var(x)}$
+            \item $c=\overline{y}-m\overline{x}$
+            \item sd of $y$ is $\frac{1}{\textcolor{red}{N-2}}\sum_i (y_i-(mx_i+c))^2$
+            \item $\pdv{\overline{y}}{y_i}=\frac{1}{N}$, $\pdv{\overline{xy}}{y_i}=\frac{x_i}{N}$
+            \item $\sigma_m=\sigma^2\sum_i\left(\pdv{m}{y_i}\right)=\frac{\sigma^2}{N(\overline{xx}-\overline{x}\overline{x})}$
+            \item $\sigma_c=\sigma^2\sum_i\left(\pdv{c}{y_i}\right)=\frac{\sigma^2\overline{xx}}{N(\overline{xx}-\overline{x}\overline{x})}$
+            \item Weighting by $1/\sigma_i^2$ instead of 1, $\overline{y}=\frac{\sum_i y_i/\sigma_i^2}{\sum_i1/\sigma_i^2}$, reduces to $\overline{y}=\frac{\sum_i y_i}{\sum_i 1}$ above
+            \item Assuming: \begin{itemize}
+                    \item Uniform prior
+                    \item Only errors in $y_i$
+                    \item $y_i$ Gaussian distribution
+                \end{itemize}
+            \item Remember: Gaussian, $\min\chi^2$, $y=mx+c$, $\frac{1}{N-2}$, $1/\sigma^2_i$ weighting
+        \end{itemize}
+    \item $\chi^2$ test, for binned data (defined differently as above), $\chi^2=\sum_i\frac{(O_i-E_i)^2}{E_i}=$degree of freedom=No.data-No.parameter
+    \item Other tests\begin{itemize}
+        \item Non-parametric statistics - look at your data
+        \item Runs test: non-random pattern despite $\chi^2$ fits well?
+        \item Sign test: $x$ and $y$ have same distribution?
+        \item Mann-Whitney test: 2 samples from same distribution?
+        \item Kolmogorov-Smirnov test: 2 distributions different?
+    \end{itemize}
+        
+    \item 
+\end{enumerate}
+
+Oscillations
+\begin{enumerate}
+    \item $\ddot{x}+\gamma\dot{x}+\omega_0^2 x = \frac{F}{m} $, $\omega_0 = \sqrt{\frac{k}{m}}, \gamma=\frac{b}{m}, Q = \frac{sqrt{mk}}{b} $
+    \item $L\ddot{q}+R\dot{q}+\frac{1}{C}q=V(t) $, $\omega_0=\frac{1}{\sqrt{LC}} \gamma = R/L, Q=\frac{1}{R}\sqrt{\frac{L}{C}} $
+    \item $Q = \frac{\omega_0}{\gamma} $
+    \item Response function\begin{itemize}
+        \item $x=\mathcal{R}(x_0 e^{i\omega t}) $, $x_0 = Ae^{i\phi_x} $, $F = \mathcal{R}(F_0 e^{i\omega t}) $, $F_0 = Be^{i\phi_F} $
+        \item $R(\omega) = \frac{x_0}{F_0} = \frac{1}{m[(\omega_0^2-\omega^2)+i\gamma\omega]} $
+        \item $|R| = \frac{1}{m\sqrt{(\omega_0^2-\omega^2)^2+\gamma^2\omega^2}} $
+        \item $\arg(R)=\arctan\left[\frac{-\gamma\omega}{(\omega_0^2-\omega^2)}\right] $
+        \item Resonance $\omega_a = \omega_0\sqrt{1-\frac{\gamma^2}{2\omega_0^2}} = \omega_0\sqrt{1-\frac{1}{2Q^2}} $
+        \item $v_0=i\omega x$, $\left|\frac{v_0}{F_0}\right| = \frac{1}{m\sqrt{\frac{(\omega_0^2-\omega^2)^2}{\omega^2}+\gamma^2}} $
+        \item $\arg\left(\frac{v_0}{F_0}\right) = \arctan\left[\frac{\omega_0^2-\omega^2}{\gamma\omega}\right] $, $\omega_v=\omega $
+        \item $a_0 = \frac{-F_0}{m[(\omega_0^2-\omega^2)/\omega^2+\frac{i\gamma}{\omega}]} $
+        \item $\omega_{\text{acc}}-\omega_0\left(1-\frac{1}{2Q^2}\right)^{-1/2} $, $\omega_a\omega_{\text{acc}}=\omega_0^2 $
+        \item $\langle P\rangle = \frac{1}{2}\realp{F_0v_0^*} = \frac{1}{2}\real{v_0v_0^*m[(\omega_0^2-\omega^2)/i\omega +\gamma]}=\frac{1}{2}m\gamma|v_0|^2=\frac{1}{2}b|v_0|^2 = \langle P_{\text{dissipated}}\rangle $
+        \item Mechanical Impedance $Z=\frac{F_0}{v_0} = m\left[\frac{\omega_0^2-\omega^2}{i\omega}+\gamma\right] $, $\langle P\rangle = \frac{1}{2}|v_0|^2\realp{Z}$
+    \end{itemize}
+    \item $\boxed{\realp{A}\realp{B} = \frac{1}{2}(A+A^*)\frac{1}{2}(B+B^*)=\frac{1}{2}\realp{AB+AB^*}}$
+    \item $P = Fv = \realp{F_0 e^{i\omega t}}\realp{v_0 e^{i\omega t}}=\frac{1}{2}\realp{F_0v_0 e^{2i\omega t}+F_0v_0^*} $,
+     $\langle P\rangle = \frac{1}{2}\realp{|F_0||v_0|e^{i(\phi_F-\phi_v)}} = \frac{1}{2}|F_0||v_0|\cos(\phi_F-\phi_v) $
+    \item $\displaystyle\langle P\rangle = \frac{1}{2}\realp{V_0I_0^*}=\frac{1}{2}|I_0|^2 R$
+    \item $\omega_P=\omega_v=\omega_0 $
+    \item At $\omega=\omega_\pm$, $|v_{\text{max}}|/|v_0|=1/\sqrt{2} $, $\Delta\omega=\omega_+-\omega_-=\gamma $, $Q = \frac{\omega_0}{\Delta \omega} $
+    \item Two coherent cosine driving forces, $x=A_1\cos(\omega t+\alpha_1+\phi)+A_2\cos(\omega t+\alpha_2+\phi) $, $A^2=A_1^2+A_2^2+2A_1A_2\cos(\alpha_2-\alpha_1) $
+    \item $\pdv[2]{\Psi}{t} = v^2\pdv[2]{\Psi}{x} $, phase speed $v=\sqrt{T/\rho} $
+    \item $\Psi(x,t) = \realp{Ae^{i(\omega t-kx)}} $, $k$ is the wavenumber
+    \item $\boxed{\pdv[2]{\Psi}{t} = v^2\laplacian\Psi}$
+    \item $\Psi(\vb{r},t)=\realp{Ae^{i\omega-i\vb{k}\cdot\vb{t}}} $, $\vb{k}$ is the wavevector
+    \item Spherical waves $v^2\frac{1}{r^2}\pdv{r}\left(r^2\pdv{\Psi}{r}\right) = \pdv[2]{\Psi}{r} $, $\Psi(r,t) = \frac{f(r\pm vt)}{r} = \realp{\frac{Ae^{i\omega t-ikr}}{r}} $
+    \item Cylindrical waves $v^2\frac{1}{r}\pdv{r}\left(r\pdv{\Psi}{r}\right)=\pdv[2]{\Psi}{r} $, for $r\gg\lambda, \Psi(r,t)\approx\realp{\frac{f(r\pm vt)}{\sqrt{r}}}$
+    \item Wave impedance (can be \textbf{negative})\begin{itemize}
+        \item $\boxed{Z = \frac{\text{transverse driving force}}{\text{transverse velocity}} = \frac{-T\pdv{\Psi}{x}}{\pdv{\Psi}{t}} =  \frac{T}{v} = \sqrt{T\rho} = \rho v }$
+        \item Power=transverse force$\times$transverse velocity, $\langle P\rangle = \frac{1}{2}\realp{Fu^*} = \frac{1}{2}\realp{Z}|u|^2 $
+        \item $u=i\omega A_0e^{i(\omega t-kx)}\implies \boxed{\langle P\rangle=\frac{1}{2}\realp{Z}\omega^2A_0^2}$
+        \item $\dv{\text{KE}}{t} = \frac{1}{2}\rho\left(\pdv{\Psi}{t}\right)^2,\ \dv{\text{PE}}{x}=\frac{1}{2}T\left(\pdv{\Psi}{x}\right)^2 $, $v^2=\frac{\omega^2}{k^2}=\frac{T}{\rho}\implies \text{KE}=\text{PE} $
+        \item $\langle P\rangle = \dv{\langle E\rangle}{x} v = \dv{\langle\text{KE}\rangle+\langle\text{PE}\rangle}{x} = \frac{1}{2}\rho v\omega^2A_0^2 = \frac{1}{2}Z\omega^2A_0^2 $ 
+        (Note $\displaystyle\realp{e^{ix}}^2 = \realp{e^{2ix}+1}\neq\realp{e^{2ix}}$)
+    \end{itemize}
+    \item Transverse rope wave at a boundary, same frequency, different wavelength\begin{itemize}
+        \item $A_1e^{i(\omega t-k_1x)}, B_1e^{i(\omega t+k_1x)}, A_2e^{i(\omega t-k_2x)}$, incident, reflected, transmitted
+        \item Continuous displacement $\Psi$, $A_1+B_1 = A_2$
+        \item Continuous transverse force $\boxed{-T\pdv{\Psi}{x}\propto Z\Psi}$, $Z_1(A_1-B_1)=Z_2A_2 $
+        \item $r = \frac{B_1}{A_1}=\frac{Z_1-Z_2}{Z_1+Z_2} $, $\tau = \frac{A_2}{A_1}=\frac{2Z_1}{Z_1+Z_2} $
+        \item $R = \frac{\langle P_{B_1}\rangle}{\langle P_{A_1}\rangle} = \left(\frac{Z_1-Z_2}{Z_1+Z_2}\right)^2$, $T = \frac{\langle P_{A_2}\rangle}{\langle P_{A_1}\rangle} = \frac{4Z_1Z_2}{(Z_1+Z_2)^2} $, $R+T=1$
+        \item Antiphase $Z_2=\infty $, in-phase $Z_2 = 0$, matched $Z_1=Z_2$
+    \end{itemize}
+    \item Longitudinal wave in gas, for displacement $a$,\begin{itemize}
+        \item Adiabatic process $pV^\gamma = pV^{C_p/C_V} = \text{constant}$
+        \item $\boxed{-\pdv{\Psi_p}{x} = \rho\pdv[2]{a}{t}}$
+        \item $\boxed{\Psi_p = \dd p = -\gamma p\dv{\Delta V}{V} = -\gamma p\pdv{a}{x}}$
+        \item $\pdv{\Psi_p}{x}=-\gamma p\pdv[2]{a}{x} - \gamma\pdv{p}{x}\pdv{a}{x}\approx -\gamma p\pdv[2]{a}{x}$
+        \item $\boxed{\pdv[2]{a}{x} = \frac{\rho}{\gamma p}\pdv[2]{a}{t} = v^2\pdv[2]{a}{t}}$, $v=\sqrt{\frac{\gamma p}{\rho}} = \sqrt{\frac{\gamma nRTV}{Vm}}=\sqrt{\frac{\gamma RT}{M}}$, \where{$M$ is the molar mass}
+        \item $\frac{1}{2}m\langle v^2\rangle = \frac{3}{2}k_B T\implies v_{\text{rms}} = \sqrt{\langle v^2\rangle} = \sqrt{\frac{3RT}{M}} \geq v$ (phase speed of sound wave is slightly smaller than rms speed of gas)
+        \item $a = a_0e^{i\omega t-ikx}$, $\Psi_p = -\gamma p\pdv{a}{x} = i\gamma pka$
+        \item Acoustic impedance $\boxed{\mathcal{L} = \sqrt{\gamma p\rho} = v\rho = \frac{\gamma p}{v}}$, impedance $Z=\frac{\text{force}}{\text{velocity}}=\frac{\Delta S\Psi_p}{\dot{a}}=\Delta S\mathcal{L}$
+        \item Pressure amplitude $A=i\gamma pka_0$ is the amplitude of pressure $\Psi_p = Ae^{i\omega t-ikx} = i\gamma pka_0e^{i\omega t-ikx}$
+        \item Intensity $I=\frac{1}{2}\realp{\Psi_p\dot{a}^*}=\frac{1}{2}\gamma pk\omega a_0^2 = \frac{|A|^2}{2\mathcal{L}} = \frac{A^2_{\text{rms}}}{\mathcal{L}} = \frac{1}{2}\mathcal{L}\omega^2|a_0|^2$ (mean $P$ per unit area)
+        \item dBA = $10\log_{10}\left(\frac{I}{I_{ref}}\right) = 20\log_{10}\left(\frac{o_{\text{rms}}}{p_{\text{ref}}}\right)$ ($p_{\text{ref}}$ is a rms value)
+    \end{itemize}
+    \item \textbf{Longitudinal} sound waves\begin{itemize}
+        \item $\Psi_p = -K\pdv{a}{x}$, $K$ is elastic modulus for any medium\begin{itemize}
+            \item In adiabatic gas, $K=B=\gamma p$ ($B$ is the bulk modulus), correct assumption
+            \item In isothermal gas, $K=B=p$, bad assumption for sound in air
+            \item In solid, $K=E$, Young's modulus
+        \end{itemize}
+        \item $v=\sqrt{\frac{K}{\rho}}$, gas $v=\sqrt{\frac{\gamma p}{\rho}}$, solid $v=\sqrt{\frac{E}{\rho}}$, non-dispersive
+        \item $\mathcal{L} = \frac{K}{v} = \sqrt{K\rho}$
+    \end{itemize}
+    \item Damped waves on a string, damping force on $\dd x$ is $-\beta\dot{\psi}\dd x$\begin{itemize}
+        \item $\boxed{\pdv[2]{\Psi}{t}+\frac{\beta}{\rho}\pdv{\Psi}{t}=v^2\pdv[2]{\Psi}{x}}$, $\Gamma=\frac{\beta}{\rho}$
+        \item trial solution $\psi=\psi_0 e^{i(\omega t-kx)}$, $\omega$ is real, $k$ is complex in general ($k=k_r-ik_i$)
+        \item $\pdv[2]{\Psi}{t} + \Gamma\pdv{\Psi}{t}=v^2\pdv[2]{\Psi}{x}$, $\omega^2-i\Gamma\omega = v^2k^2$
+        \item $k_r^2-k_i^2 = \frac{\omega^2}{v^2}$, $2k_rk_i = \frac{\Gamma\omega}{v^2}$
+        \item Light damping $\Gamma\ll\omega$, $k_r\approx\omega/v,\ k_i\approx\Gamma/(2v)$
+        \item Heavy damping $k_r\approx k_i\approx\left(\frac{\Gamma\omega}{2v^2}\right)^{1/2}$
+        \item Find both by solving quadratic and approximating square root at the last step
+        \item The \textbf{characteristic impedance} $Z=\frac{F}{v}=\frac{-T\Psi'}{\dot{\Psi}}=\frac{Tk}{\omega}=\frac{T}{\omega}(k_r-ik_i)$
+        \item Light damping $Z(\omega)=\frac{T}{v}\left(1-\frac{i\Gamma}{2\omega}\right)=Z_0\left(1-\frac{i\Gamma}{2\omega}\right)$, where $Z_0$ is $Z$ with zero damping
+        \item Heavy damping $Z(\omega)=Z_0(1-i)\sqrt{\frac{\Gamma}{2\omega}}$
+        \item Reflection coefficient $r=\frac{Z_1-Z_2}{Z_1+Z_2}$
+        \item From undamped ($Z_0$) to damped ($Z$)\begin{itemize}
+                \item $r(\omega)\approx\frac{i\Gamma}{4\omega}$
+                \item $r(\omega)\approx-1$
+            \end{itemize}
+            \item 
+        \end{itemize}
+    \item Waveguide on a membrane\begin{itemize}
+            \item \includegraphics*[width=0.6\linewidth]{membrane_waveguide.png}
+            \item $\Psi_A=Ae^{i(\omega t-k_x x-k_y y)}$
+            \item $\Psi_B=-Ae^{i(\omega t-k_x x+k_y y)}$
+            \item $\Psi=\Psi_A+\Psi_B=-2iA\sin(k_y y)e^{i(\omega t-k_x x)}$
+            \item Boundary condition: $\Psi=0$ at $y=0,b$
+            \item $k_y=\frac{n\pi}{b}$
+            \item $k^2=k_x^2+k_y^2$
+            \item Dispersion relation: $\boxed{\omega^2=v^2\left(k_x^2+\frac{n^2\pi^2}{b^2}\right)}$
+            \item Phase velocity $\boxed{v_p=\frac{\omega}{k_x}=\frac{\omega}{\sqrt{\left(\frac{\omega^2}{v^2}-\frac{n^2\pi^2}{b^2}\right)}}}$
+            \item Group velocity $\boxed{v_g=\dv{\omega}{k}=\frac{v^2}{\omega}\sqrt{\left(\frac{\omega^2}{v^2}-\frac{n^2\pi^2}{b^2}\right)}}$
+            \item If $k_x^2<0$, $k_x$ is imaginary, the wave is \textbf{evanescent}
+        \end{itemize}
+    \item Wave equation $\laplacian{\vb{E}}=\mu\epsilon\pdv[2]{\vb{E}}{t}=\frac{1}{c^2}\pdv[2]{\vb{E}}{t}$
+    \item $c_0=\frac{1}{\sqrt{\mu_0\epsilon_0}}$, $n=\frac{c_0}{c}=\sqrt{\mu_r\epsilon_r}$
+    \item $Z=\frac{|\vb{E}|}{|\vb{H}|}=\frac{|\vb{E}|}{|\vb{B}/\mu|}=c\mu=\sqrt{\frac{\mu}{\epsilon}}=Z_0\sqrt{\frac{\mu_r}{\epsilon_r}}$
+    \item $\boxed{Z=\frac{Z_0}{n}}$, $\boxed{Z_0=\sqrt{\frac{\mu_0}{\epsilon_0}}}\approx 376.730\Omega$ ($Z_0$ is impedance of free space)
+    \item Reflection of EM wave $r=\frac{n_1-n_2}{n_1+n_2}$
+    \item Optics\begin{itemize}
+            \item Quantum Electrodynamics: full theory of EM interaction with matter, complicated, only used for simple systems
+            \item Maxwell's Equations: Large number of photons, hard to compute except for special boundary conditions
+            \item Physical Optics: aka scalar wave theory, ignore polarization, simplify b.c. Use Huygens' construction of secondary waves. (What we use in this course)
+            \item Ray Optics: Ignore wave properties, ``corpuscular theory''.
+        \end{itemize}
+    \item Huygens' Principle: each point on a wavefront acts as a source of secondary wavelets which propagate, overlap, interfere, and thus carry the wavefront forward
+    \item Huygens-Fresnel Principle\newline
+        \begin{minipage}{0.7\linewidth}
+            \begin{itemize}
+                \item Obliquity/inclination factor $K(\theta)=\frac{1+\cos\theta}{2}$
+                
+                David Miller: dipole; Forrest Anderson: dirac delta functions
+                \item The secondary wavelets have an amplitude $-i/\lambda$ relative to the primary wave
+                \item \href{https://en.wikipedia.org/wiki/Huygens%E2%80%93Fresnel_principle#:~:text=The%20Huygens%E2%80%93Fresnel%20principle%20(named,from%20different%20points%20mutually%20interfere.}{No physical foundation}, but experimentally verified
+            \end{itemize}
+        \end{minipage}
+        \begin{minipage}{0.3\linewidth}
+            \includegraphics*[width=\linewidth]{obliquity factor.png}
+        \end{minipage}
+    \item The diffraction integral\begin{itemize}
+            \item \includegraphics*[width=0.5\linewidth]{aperture_plane.png}
+            \item $\Psi(\vb{r},t)=\Re(\psi(\vb{r}e^{-i\omega t}))$
+            \item $\psi_{\mathrm{incident}}=\frac{a_Se^{iks}}{s}$
+            \item Obliquity factor $\boxed{K(\theta)=\frac{\cos\theta_S+\cos\theta_P}{2}}$ (\mylabel{obliquity_factor}{Proof})
+            \item Fresnel-Kirchhoff diffraction \mylabel{FKdiffIntegral}{Integral} $\psi_P=\iint_\Sigma -\frac{i}{\lambda}h(x,y)K(\theta)\frac{a_S e^{ik(s+r)}}{sr}\dd x\dd y$
+            \item Key take-away: plane wave on aperture produces $\boxed{\psi_P\propto \frac{e^{ikr}}{r}}$
+        \end{itemize}
+    \item Fraunhofer diffraction\begin{itemize}
+            \item \includegraphics*[width=0.6\linewidth]{fraunhofer_diffraction.png}
+            \item $r^2 = L^2+(x_0-x)^2+(y_0-y)^2 = R^2\left(1-2\frac{x_0x+y_0y}{R^2}+\frac{x^2+y^2}{R^2}\right)$
+            \item $R^2=L^2+x_0^2+y_0^2$
+            \item $r\approx R-\frac{x_0 x+y_0 y}{R}+\frac{x^2+y^2}{2R}$
+            \item Condition for Fraunhofer $\boxed{\frac{k(x^2+y^2)}{2R}\ll\pi}$ (or $R\gg\frac{\rho^2}{\lambda}$)
+            \item Ignore obliquity factor, $\psi_P\propto\iint_\Sigma h(x,y)\exp\left[-ik\left(\frac{x_0}{R}x+\frac{y_0}{R}y\right)\right]\dd x\dd y$
+            \item 1D aperture, $\psi_P\propto\int \boxed{h(y)e^{-iqy}\dd y}$, $q=ky_0/R=k\sin\theta$
+        \end{itemize}
+    \item Fraunhofer, angular resolution of circular aperture \textcolor{red}{$\theta=\frac{1.22\lambda}{d}$}.
+    \item Diffraction grating of $N$ slits' resolution at $n$-th maxima \textcolor{red}{$\frac{\delta\lambda}{\lambda}=\frac{1}{nN}$}\begin{itemize}
+        \item slit separation $D$, aperture screen distance $R$, $p=k\sin\theta=\frac{2\pi}{\lambda}\frac{x_0}{R}$
+        \item Width of $n$-th peak is first peak at $x_0=0$ to position of first zero
+        \item $h(y)=\sum_{m=0}^{N-1}\delta(x-mD)$
+        \item $\psi_P\propto\int h(y)e^{-ipx}\dd x=\sum_{m=0}^{N-1}e^{-ipmD}=\frac{1-e^{-ipND}}{1-e^{-ipD}}=\frac{\sin(\frac{pND}{2})}{\sin(\frac{pD}{2})}e^{-ip(N-1)D/2}$
+        \item $I=|\psi_P|^2\propto\left(\frac{\sin(\frac{pND}{2})}{\sin(\frac{pD}{2})}\right)^2$
+        \item Let $I=I_0$ at $N=1$, $I=I_0\left(\frac{\sin(\frac{pND}{2})}{\sin(\frac{pD}{2})}\right)^2$
+        \item Peaks at $\frac{pD}{2}=n\pi$, if not a peak and $\frac{pND}{2}=n\pi$, a zero, there are $N-1$ zeros between peaks. Peak height $N^2I_0$ by l'Hopital's rule.
+        \item 1/2-Peak-width (first zero) is $pND/2=kNDx_0/2R=\pi$, $x_0=\frac{\lambda R}{DN}$
+        \item In the extreme case, $n$-th peak of $\lambda+\delta\lambda$ falls on minimum of $n$-th peak of $\lambda$
+        \item $n$-th maximum, $D\sin\theta=D\frac{x_0}{R}=n\lambda$, $x_0=\frac{n\lambda}{D}$
+        \item $\frac{n(\lambda+\delta\lambda)R}{D}-\frac{n\lambda R}{D}=\frac{\lambda R}{DN}$, $\boxed{\frac{\delta\lambda}{\lambda}=\frac{1}{nN}}$
+        \item Higher order peaks separates lights better (higher resolution), but might not be obtained.
+        \item More slits $N$ on grating increases resolution, but reduces $x_0$ so more difficult to measure. (Rayleigh Criterion)
+        \item \includegraphics*[width=0.4\linewidth]{diffraction grating.png}
+    \end{itemize}
+    \item \begin{tabular}{|Sc|Sc|}
+            \hline
+            $f(t)$ & $\tilde{f}(\omega)=\frac{1}{\sqrt{2\pi}}\int_{-\infty}^{\infty}f(t)e^{-i\omega t}\dd t$\\\hline
+            $\delta(t-t_0)$ & $\frac{e^{-i\omega t_0}}{\sqrt{2\pi}}$\\\hline
+            $f(t)=\mathrm{int}(|t|\leq1/2)$ (top-hat) & $\frac{\mathrm{sinc(\omega/2)}}{\sqrt{2\pi}}$\\\hline
+            $e^{-t^2/2}$ (Gaussian) & $e^{-\omega^2/2}$\\\hline
+            $\sum_{n=-\infty}^\infty\delta(t-n\textcolor{red}{T})$ (comb) & $\frac{\sqrt{2\pi}}{T}\sum_{n=-\infty}^{\infty}\delta(\omega-\textcolor{red}{\frac{2\pi}{T}}n)$\\\hline
+        \end{tabular}
+    \item Babinet's principle: The diffracted intensities of an aperture and its complement are the same except at the origin
+        \begin{align*}
+            \psi_a \propto \iint_A e^{-i(px+qy)}\dd x\dd y\\
+            \psi_b \propto \iint_{\text{all space}}e^{-i(px+qy)}\dd x\dd y-\psi_a\propto\boxed{\delta(p,q)-\psi_a}
+        \end{align*}
+    \item On-axis Fresnel diffraction ($R\sim\rho^2/\lambda$, $p=q=0$)\[
+                \psi_P\propto\iint_\Sigma h(x,y)\exp\left(ik\frac{x^2+y^2}{2R}\right)\dd x\dd y
+            \]
+    \item Rectangular aperture\newline
+        \begin{minipage}{0.5\linewidth}
+            \begin{align*}
+                \psi_P\propto \int_{x_1}^{x_2}\exp\left(\frac{ikx^2}{2R}\right)\dd x\int_{y_1}^{y_2}\exp\left(\frac{iky^2}{2R}\right)\dd y\\
+                u = x\sqrt{\frac{2}{\lambda R}}, \quad v=y\sqrt{\frac{2}{\lambda R}}\\
+                \psi_P\propto\int_{u_1}^{u_2}\exp\left(\frac{i\pi u^2}{2}\right)\dd u\int_{v_1}^{v_2}\exp\left(\frac{i\pi v^2}{2}\right)\dd v\\
+                C(w)=\int_0^w\cos\left(\frac{\pi u^2}{2}\right)\dd u\\
+                C(w)=\int_0^w\sin\left(\frac{\pi u^2}{2}\right)\dd u\\
+            \end{align*}
+        \end{minipage}
+        \begin{minipage}{0.5\linewidth}
+            \includegraphics*[width=\linewidth]{cornu_spiral.png}
+        \end{minipage}
+        $\dd l^2=\dd w$ on the Cornu spiral\newline
+        $w\rightarrow\infty$, $\psi_P=0.5(1+i)$\newline
+        $I = |\psi_P|^2 \propto\text{distance between 2 points on spiral}$
+    \item Circular aperture\[
+                \psi_P\propto\int_{s=0}^{s=r_a^2}\frac{K(s)}{(a^2+s)^{1/2}(b^2+s)^{1/2}}\exp\left(\frac{i\pi s}{\lambda R}\right)\pi\dd s,\quad \boxed{s=\rho^2}
+            \]  
+        \includegraphics*[width=0.5\linewidth]{circular aperture.png}\newline
+        Fresnel half-period zones, $\boxed{\sqrt{(n-1)\lambda R}\leq\rho\leq\sqrt{n\lambda R}}$, predicts poisson's spot, also a \emph{highly chromatic} lens with focal length $f=\frac{\rho_1^2}{\lambda}=\frac{\rho^n}{n\lambda}$\newline
+        Many focal point corresponding to different number of half-period zones\newline
+    \item Interference with broadband light
+    \item Thin film interference
+    \item Fabry-Perot etalon
+    \item Left/Right polarization: right/left hand, thumb along propagation direction (IEEE Engineer), or the opposite/towards source (Experimentalist)\\
+        (Sketch polarization in \textcolor{red}{3D})
+\end{enumerate}
+
+\section*{Proofs}
+\begin{enumerate}
+    \item \myref{obliquity_factor}\begin{itemize}
+            \item Proof a bit long, read through this great book next time (chap11 on holography too!)
+            \includegraphics*[width=0.2\linewidth]{book_cover.png}
+        \end{itemize}
+    \item \myref{FKdiffIntegral}\begin{itemize}
+            \item The plane wave has amplitude $\psi_s$ at the aperture
+            \item Perpendicular distance from $P$ to aperture is $L$, is large
+            \item $\psi_P=\iint_\Sigma K(\theta_S,\theta_P)\frac{A\psi_se^{ikr}}{r}\rho\dd\rho\dd\phi$
+            \item $L^2+\rho^2=r^2$, $\rho\dd\rho=r\dd r$, $r$ goes from $L$ to $R(\phi)$
+            \item $R(\phi)$ varies rapidly as $\phi$ changes because $L$ is large
+            \item $\psi_P=\int_0^{2\pi}\int_L^{R(\phi)}\frac{A\psi_s e^{ikr}}{r}r\dd r\dd\phi=\frac{A\psi_s}{ik}\int_0^{2\pi}e^{ikR(\phi)}\dd\phi - \frac{2\pi A}{ik}\psi_se^{ikL}$
+            \item $e^{ikR(\phi)}$ oscillates quickly, first integral vanishes
+            \item $\psi_P=\psi_s$, $\frac{-2\pi A}{ik} = 1$, $\boxed{A = -i/\lambda}$
+        \end{itemize}
+\end{enumerate}
+
+\end{document}

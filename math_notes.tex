@@ -1,0 +1,811 @@
+\documentclass{article}
+\usepackage{amsmath, amssymb, amsthm, amsfonts, bm}
+\theoremstyle{remark}
+\newtheorem*{theorem}{Theorem}
+\newtheorem*{remark}{Remark}
+\newtheorem*{definition}{Definition}
+\newtheorem*{hypothesis}{Hypothesis}
+\newtheorem*{corollary}{Corollary}
+\theoremstyle{remark}
+
+\usepackage{physics}
+\usepackage[a4paper, total={6in,10in}]{geometry}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{hyperref}
+    \hypersetup{colorlinks=true, linkcolor=ForestGreen}
+\usepackage{graphicx}
+    \graphicspath{{./img/}}
+\usepackage{tikz}
+\usepackage{ragged2e}
+
+\usepackage{cellspace} 
+\newcolumntype{L}[1]{>{\centering\arraybackslash}m{#1}}
+\usepackage{makecell}
+\setlength{\cellspacetoplimit}{6pt}
+\setlength{\cellspacebottomlimit}{6pt}
+
+\usepackage{soul}
+
+\everymath{\displaystyle}
+
+\newcommand{\where}[1]{\begin{flushright}where #1.\end{flushright}}
+\newcommand{\wher}[1]{\begin{flushright}#1.\end{flushright}}
+\newcommand{\mylabel}[2]{\hyperref[#1]{#2}\label{back:#1}}
+\newcommand{\myref}[1]{\hyperref[back:#1]{$\bigstar$}\label{#1}}
+\newcommand{\e}{\hat{\vb{e}}}  % unit vector
+
+\begin{document}
+
+    \title{Math Cheatsheet}
+    \author{Sol}
+    \maketitle
+
+    \section*{The Fourier Transform}
+    \begin{enumerate}
+        \item $\tilde{f}(k) = \frac{1}{\sqrt{2\pi}}\int_{-\infty}^{\infty} e^{-ikx}f(x) \dd x = \mathcal{F}[f](k)$
+                \begin{itemize}
+                    \item Real and even ($f^*(x)=f(x) \qand f(x)=f(-x)$)$\implies \tilde{f}^*(k)=\tilde{f}(k) $ ($\tilde{f}$ is \textbf{real})
+                    \item Real and odd $\implies$ $\tilde{f}$ is imaginary ($\tilde{f}^*(k)=-\tilde{f}(k) $)
+                    \item Linearity, $\mathcal{F}[\alpha f(x)+\beta g(x)]=\alpha\mathcal{F}[f(x)]+\beta\mathcal{F}[g(x)] $
+                    \item Rescaling, $\mathcal{F}[f(\alpha x)] = \frac{1}{|\alpha|}\tilde{f}\left(\frac{k}{\alpha}\right) $
+                    \item Translation, $\mathcal{F}[f(x-a)]=e^{-ika}\mathcal{F}[f(x)] $
+                    \item Exponential, $\mathcal{F}[e^{iax}f(x)](k)=\mathcal{F}[f](k-a) $
+                    \item Duality, $\mathcal{F}[\tilde{f}]=f(-k) $
+                    \item For \textbf{real} $k$, $\mathcal{F}[f^*](k)=\mathcal{F}[f](-k) $
+                    \item Symmetry, $f(-x)=\pm f(x)\implies\tilde{f}(-k)=\pm\tilde{f}(k) $
+                    \item Differentiation, $\mathcal{F}\left[\dv{f}{x}\right]=ik\tilde{f}(k) $ ($\mathcal{I}[k\tilde{f}]=-i\dv{f}{x} $)
+                    \item $\mathcal{I}\left[\dv{\tilde{f}}{k}\right]=-ixf(x) $ ($\mathcal{F}[xf]=i\dv{\tilde{f}}{k} $)
+                    \item Convolution, $\mathcal{F}[f*g]=\sqrt{2\pi}\mathcal{F}[f]\mathcal{F}[g] $
+                    \item $\mathcal{F}[fg]=\frac{1}{\sqrt{2\pi}}\mathcal{F}[f]*\mathcal{F}[g] $
+                    \item Correlation, $\mathcal{F}[f\otimes g](x)=\sqrt{2\pi}\mathcal{F}[f]^*\mathcal{F}[g] $ (Wiener-Khinchin if $g=f$)
+                    \item (TODO: prove the inverse)
+                    \item \textbf{Autoconvolution} is $\sqrt{2\pi}\tilde[f]^2$, \textbf{autocorrelation} is $\sqrt{2\pi}|f|^2$
+                    \item Parseval's theorem $\int_{-\infty}^{\infty} |f(x)|^2 \dd x = \int_{-\infty}^{\infty} |\tilde{f}(k)|^2 \dd k$ (inverse of Wiener-Khinchin/delta function)
+                \end{itemize}
+        \item $f(x)=\frac{1}{\sqrt{2\pi}}\int_{-\infty}^{\infty} e^{ikx}\tilde{f}(k) \dd k =\mathcal{I}[\tilde{f}](x)$
+        \item Convolution is $(f*g)(x)=\int_{-\infty}^{\infty} f(y)g(x-y) \dd y $
+        \item Correlation is $(f\otimes g)\int_{-\infty}^{\infty}[f(y)]^*g(x+y)\dd y $\begin{itemize}
+            \item $f(x)\otimes g(x)=f(-x)^* * g(x) $
+            \item $f(x)\otimes g(x) = g(-x)^*\otimes f(-x)^* $
+            \item If $f$ is hermitian, $f\otimes g=f*g $
+            \item If $f,g$ are hermitian, $f\otimes g=g\otimes f $
+            \item $(f\otimes g)\otimes(f\otimes g)=(f\otimes f)\otimes(g\otimes g) $
+        \end{itemize}
+        \item $\delta(t-t_0)=\frac{1}{2\pi}\int_{-\infty}^\infty e^{-i\omega (t-t_0)}\dd \omega$ (prove \textcolor{red}{$\frac{1}{2\pi}$} by transforming twice)
+        \item Laplace Transform $\mathcal{L}(f)(s)=\int_{0}^{\infty} f(t)e^{-st} \dd t $
+    \end{enumerate}
+
+    \begin{center}
+        \begin{tabular}{|c|c|}
+            \hline
+            $f$ & $\tilde{f}$\\
+            \hline
+            $e^{-b|x|},\ b>0$ & $\frac{1}{\sqrt{2\pi}}\frac{2b}{k^2+b^2}$\\
+            \hline
+            $\frac{1}{x^2+b^2} $ & $\sqrt{\frac{\pi}{2b^2}}e^{-b|k|} $\\
+            \hline
+            $\frac{1}{\sqrt{2\pi\epsilon^2}\exp\left(-\frac{x^2}{2\epsilon^2}\right)}$ & $\frac{1}{\sqrt{2\pi}}exp\left(-\frac{\epsilon^2k^2}{2}\right) $\\
+            \hline
+            $\delta(x-a) $ & $\frac{1}{\sqrt{2\pi}}e^{-ika} $\\
+            \hline
+            $H(x-a)e^{-\epsilon(x-a)} $ & $\frac{1}{\sqrt{2\pi}}\frac{e^{-ika}}{\epsilon+ik} $\\
+            \hline
+            $H(x-a) $ & $\frac{e^{-ika}}{ik\sqrt{2\pi}} $\\
+            \hline
+            $H(x+a)H(a-x) $ (tophat) & $\sqrt{\frac{2}{\pi}}\frac{\sin (ak)}{k} $\\
+            \hline
+
+        \end{tabular}
+    \end{center}
+
+    \section*{Vector Calculus}
+    Practice List\begin{enumerate}
+        \item $(\vb{a}\times\vb{b})_i=\epsilon_{ijk}a_j b_k $
+        \item $\det A=\epsilon_{ijk}A_{1i}A_{2j}A_{3k} $
+        \item $\det(\vb{e}_i\ \vb{e}_j\ \vb{e}_k)=\epsilon_{ijk} $
+        \item $\epsilon_{ijk}\epsilon_{lmn} = \det(\vb{e}_i\ \vb{e}_j\ \vb{e}_k)^T\det(\vb{e}_l\ \vb{e}_m\ \vb{e}_n) = \begin{vmatrix}
+            \delta_{il} & \delta_{im} & \delta_{in}\\
+            \delta_{jl} & \delta_{jm} & \delta_{jn}\\
+            \delta_{kl} & \delta_{km} & \delta_{kn}
+        \end{vmatrix}$
+        \item Bear in mind that $\boxed{\delta_{kk}=\textcolor{red}{3}=\delta_{k1}\delta_{k1}+\delta_{k2}\delta_{k2}+\delta_{k3}\delta_{k3}}$ ($\delta_{11}=1$) ($\delta_{lm}=\delta_{l1}\delta_{m1}+\delta_{l2}\delta_{m2}+\delta_{l3}\delta_{m3}$)
+        \item $\epsilon_{ijk}\epsilon_{imn}=\delta_{jm}\delta_{kn}-\delta_{jn}\delta_{km} $
+        \item $\boxed{\epsilon_{ijk}\epsilon_{ijk}=6}$
+        \item $(\vb{a}\times\vb{b})\cdot(\vb{c}\times\vb{d})=(\vb{a}\cdot\vb{c})(\vb{b}\cdot\vb{d})-(\vb{a}\cdot\vb{d})(\vb{b}\cdot\vb{c}) $
+        \item $\big(\vb{a}\times(\vb{b}\times\vb{c})\big)_{i}\ =\big((\vb{a}\cdot\vb{c})\vb{b}-(\vb{a}\cdot\vb{b})\vb{c}\big)_{i} $
+        \item $\nabla f(r)=f'(r)\frac{\vb{r}}{r} $, $\grad r = \frac{\vb{r}}{r} $
+        \item $\nabla f = \vb{e}_i\pdv{f}{x_j},\ \nabla\cdot\vb{F}=\pdv{F_j}{x_j},\ \nabla\times\vb{F}=\epsilon_{ijk}\vb{e}_i\pdv{F_k}{x_j} $
+        \item $\|\vb{x}\|^2\|\vb{y}\|^2-|\vb{x}\cdot\vb{y}|^2\geq 0 $
+        \item $\vb{F}\cdot\grad\neq-\grad\cdot\vb{F} $
+        \item \includegraphics*[width=0.75\linewidth]{vec_identities.png}
+        \item $\laplacian\vb{F}=\grad(\div\vb{F})-\curl(\curl\vb{F}) $
+        \item $\curl(\grad\psi) = 0 $, $\div(\grad\vb{F}) = 0 $
+        \item (Divergence Theorem) \begin{itemize}
+            \item (Vector) $\iiint_{V}\div\vb{u}\dd V=\iint_{S}\vb{u}\cdot\dd {S} $
+            \item (Scalar) $\iiint_{V}\grad\phi\dd V=\iint_{S}\phi\dd \vb{S} $
+            \item (Generalized Stokes) $\iiint_{V}\curl\vb{A}\dd V = \iint_{S}\vb{\hat n}\times\vb{A}\dd S $
+        \end{itemize}
+        \item (Stokes Theorem) \begin{itemize}
+            \item $\iint_{S}\curl\vb{u}\cdot\dd \vb{S} = \oint_{C}\vb{u}\cdot\dd\vb{r} $
+            \item (Green's) $\iint_A\left(\pdv{u_y}{x}-\pdv{u_x}{y}\right)\dd x\dd y = \int_C(u_x\dd x+u_y\dd y) $
+        \end{itemize}
+        \item \includegraphics*[width=0.5\linewidth]{Curvilinear Coordinates.png}
+        \item \includegraphics*[width=0.5\linewidth]{Curvilinear Coordinates2.png}
+        \item \begin{itemize}
+            \item $\vb{h}_j = \pdv{\vb{r}}{q_j} = \pdv{x_i}{q_j}\vb{\hat x}_i $
+            \item $\vb{h}_j = h_j\vb{e}_j $, $h_j = \left|\pdv{\vb{r}}{q_j}\right| $
+            \item $\vb{e}_j = \frac{1}{h_j}\pdv{\vb{r}}{q_j} $
+            \item $J\equiv\pdv{(x,y,z)}{(q_1,q_2,q_3)}=|\vb{h}_1\cdot\vb{h}_2\times\vb{h}_3| $, $\dd V = \dd\vb{r}_1\times\dd\vb{r}_2\cdot\dd\vb{r}_3 = |J|\dd q_1\dd q_2\dd q_3 = h_1 h_2 h_3\dd q_1\dd q_2\dd q_3 $ (chain rule, inverse)
+            \item (Orthogonality) $\vb{e}_i\cdot\vb{e}_j=\delta_{ij}, |\dd\vb{r}|^2=\sum_{i}h_i^2(\dd q_i)^2 $
+            \item $\dd\vb{r}=\sum_i h_j\vb{e}_j\dd q_j $
+            \item $\boxed{\grad=\sum_i\vb{e}_i\frac{1}{h_i}\pdv{q_i}} $
+            \item (even permutation $(i,j,k)$) $\vb{e}_i=\vb{e}_j\times\vb{e}_k = h_j\grad q_j\times h_k\grad q_k $
+            \item $\boxed{\div\vb{F}=\frac{1}{h_1 h_2 h_3}\sum_{\mathrm{even\ perms}}\pdv{h_j h_k F_i}{q_i}} $
+            \item $\laplacian = \div\grad = \frac{1}{h_1 h_2 h_3}\sum_{\mathrm{even\ perms}}\pdv{q_i}\left(\frac{h_j h_k}{h_i}\pdv{q_i}\right) $
+            \item $\boxed{\curl\vb{F}=\frac{1}{h_1 h_2 h_3}\begin{vmatrix}
+                h_1\vb{e}_1 & h_2\vb{e}_2 & h_3\vb{e}_3\\
+                \pdv{q_1} & \pdv{q_2} & \pdv{q_3}\\
+                h_1F_1 & h_2F_2 & h_3F_3
+            \end{vmatrix}} $
+            \item $\laplacian\vb{F}=\laplacian(F_i\vb{e}_i) $  ($(\laplacian\vb{F})_i \neq \laplacian F_i $)
+        \end{itemize}
+    \end{enumerate}
+
+    \section*{Green's functions}
+    \begin{enumerate}
+        \item Different $\delta_\epsilon(x)$s\begin{itemize}
+            \item $\delta_\epsilon(x)=\begin{cases}
+                0&x<-\epsilon\\
+                \frac{1}{2\epsilon}&\quad -\epsilon\leq x\leq\epsilon\\
+                0&\epsilon<x
+            \end{cases}$
+            \item $\delta_\epsilon(x)=\begin{cases}
+                (x+\epsilon)/\epsilon^2 & -\epsilon<x<0\\
+                (\epsilon-x)/\epsilon^2 & 0\leq x<\epsilon\\
+                0 & \qotherwise
+            \end{cases}$
+            \item $\delta_\epsilon(x)=\frac{\epsilon}{\pi(x^2+\epsilon^2)}=\frac{1}{2\pi}\int_{\infty}^{-\infty}e^{ikx-\epsilon|k|\dd k}  \dd $
+            \item 
+        \end{itemize}
+        \item $\delta(x)$ properties\begin{itemize}
+                \item $\int_{-\alpha}^{\beta} \delta(x) \dd x = 1,\ \alpha>0,\ \beta>0$
+                \item $\int_{-\infty}^{\infty} \delta(x-\xi)f(x) \dd x = f(\xi)$
+                \item $H'(x)=\delta(x)$
+                \item $\int_{-\infty}^{\infty} \delta'(x)f(x) \dd x = -f'(x)$
+                \item $\delta(ax) = \frac{\delta(x)}{|a|}$
+                \item For a nice function $\delta(f(x)) = \sum_{i}\delta(\eval{\dv{f}{x}}_{x=x_i}(x-x_i)) = \sum_i\frac{\delta(x-x_i)}{\left|\eval{\dv{f}{x}}_{x=x_i}\right|}$
+            \end{itemize}
+        \item Wronskian $W[y_1,y_2]=\det\begin{pmatrix}
+            y_1 & y_2\\
+            y_1' & y_2'
+        \end{pmatrix}\neq 0$ is the condition for linearly independent solutions
+        \item \textbf{Initial and boundary conditions} is written as $Ay(a)+By'(a)=E$, $E=0$ means BC is \textit{homogeneous}.
+        \item Differentail operator $L=\dv[2]{x}+p(x)\dv{x}+q(x)$ (turn $\mathcal{L}$ into this \textcolor{red}{standard form} first, \textcolor{red}{coefficient of 2nd order term} is 1)
+        \item Green's function is the solution to $LG(x,\textcolor{red}{\zeta})=\delta(x-\textcolor{red}{\zeta})$
+        \item $y(x) = \int_{a}^{b} G(x,\textcolor{red}{\zeta})f(\zeta) \dd \zeta$
+        \item Green's function properties\begin{itemize}
+            \item $G(x,\zeta)$ of $L$ shares the same boundary conditions as $y(x)$, which is the solution to $Ly(x)=f(x)$, by construction
+            \item $G(x,\zeta)$ is a continuous function in $x$ and $\zeta$
+            \item $\lim_{\epsilon\rightarrow0}\left[G(x,\textcolor{red}{\zeta})\right]_{x=\zeta-\epsilon}^{x=\zeta+\epsilon}=0$
+            \item $\lim_{\epsilon\rightarrow0}\left[\pdv{G}{x}\right]_{x=\zeta-\epsilon}^{x=\zeta+\epsilon} = 1$ (or whatever the \textcolor{red}{coefficient of the 2nd order term is})
+        \end{itemize} (Start from $\boxed{1=\lim_{\epsilon\rightarrow0}\int_{\zeta-\epsilon}^{\zeta+\epsilon}\delta(\zeta-x)\dd x}$, $\mathcal{L}$ is 2nd order, $p,q$ are continuous, and assume $p(x)$ is continuous \mylabel{greens}{$\bigstar$})
+        \item Writing $G(x,\zeta)=\begin{cases}
+            \alpha_-(\zeta) y_1(x)+\beta_-(\zeta) y_2(x)\quad& \qfor a\leq x<\zeta\\
+            \alpha_+(\zeta) y_1(x)+\beta_+(\zeta) y_2(x)\quad& \qfor \zeta\leq x\leq b,
+        \end{cases}$
+        it follows immediately that $\begin{pmatrix}
+            y_1(\zeta) & y_2(\zeta)\\
+            y_1'(\zeta) & y_2'(\zeta)
+        \end{pmatrix}\begin{pmatrix}
+            \alpha_+(\zeta) - \alpha_-(\zeta)\\
+            \beta_+(\zeta) - \beta_-(\zeta)
+        \end{pmatrix}=\begin{pmatrix}
+            0\\1
+        \end{pmatrix}$, if the solutions are independent,
+        $\alpha_+(\zeta)-\alpha_-(\zeta)=-\frac{y_2(\zeta)}{W(\zeta)}$ and $\beta_+(\zeta) - \beta_-(\zeta) = \frac{y_1(\zeta)}{W(\zeta)}$
+    \end{enumerate}
+
+
+    \section*{Partial differential equations}
+    Consider separable solutions
+    
+    For $x^2y''+axy'+y=0$, try $y=x^r$
+
+    \section*{Matrices}
+    \begin{enumerate}
+        \item Metric $G_{ij}=\vb{u}_i\cdot\vb{u}_j$\begin{itemize}
+            \item $\vb{v}\cdot\vb{w}=\vb{v}^\dagger G\vb{w}$
+            \item $G^\dagger = G$ (Hermitian)
+            \item $v^\dagger G v\geq 0$ (positive definite)
+        \end{itemize}
+        \item \begin{itemize}
+            \item $\det M = \prod_{i=1}^{n}\lambda_i$ ($\det(AB)=\det A\det B$)
+            \item $\tr M = \sum_{i=1}^{n}\lambda_i$
+            \item $\tr(M^n) = \tr(\Lambda^n)$ ($\tr(AB)=\tr(BA)$)
+        \end{itemize}
+        \item Unitary matrix $A^\dagger = A^{-1}$
+        \item Normal matrix $AA^\dagger = A^\dagger A$
+        \item Hermitian matrices\begin{itemize}
+            \item The eigenvalues of an Hermitian matrix are real
+            \item The eigenvectors of an Hermitian matrix with distinct eigenvalues are orthogonal
+            \item A Hermitian matrix has $n$ orthogonal linearly independent eigenvectors
+            \item has $n$ orthonormal eigenvectors
+            \item Anti-Hermitian and Unitary matrices have imaginary eigenvalues with unit modulus
+        \end{itemize}
+        \item Simplifying quadric surface $x^T A x+b^T x +c=0$\begin{itemize}
+            \item $S=\frac{1}{2}(A+A^T)$, $y^T Sy+b^T y +c=0$ (symmetric thus diagonalizable)
+            \item Diagonalize, $z^T \Lambda z+b^T z+c=0$
+            \item Offset, $x'^T\Lambda x' = k$ (to cancel out second term)
+        \end{itemize}
+        \item Quadric surface names
+        \begin{center}
+            \includegraphics*[width=0.8\linewidth]{Quadric surfaces.png}
+        \end{center}
+        \item All eigenvalues of a \textcolor{red}{nilpotent} matrix are 0
+        \item The Rayleight-Ritz variational principle. The first variation of $\lambda(x)=\frac{x^T S x}{x^T x}$ is 0 for all possible $\delta x$ when $Sx=\lambda(x)x$
+    \end{enumerate}
+
+
+    \section{Elementary analysis}
+    \begin{enumerate}
+        \item Limit, series, partial sum, absolute convergence$\implies$ (conditional) convergence
+        \item Tests for convergence\begin{itemize}
+            \item Comparison test (between two series)
+            \item D'Alembert's ratio test
+            \item Cauchy's test $\lim_{r\rightarrow\infty}u_r^{1/r} < 1$
+        \end{itemize}
+        \item Taylor $f(x_0+h)=\sum_{n=0}^{\infty}\frac{h^n}{n!}f^{(n)}(x_0)$
+        \item $\dv{f}{z}\equiv f'(z)=\lim_{\delta z\rightarrow 0}\frac{f(z+\delta z)-f(z)}{\delta z}$ same by any route in the complex plane
+        \item Cauchy-Riemann equations $f(z)=u(x,y)+iv(x,y)$, $\pdv{u}{x}=\pdv{v}{y}, \pdv{v}{x}=-\pdv{u}{y}$\begin{itemize}
+            \item $u,v$ are harmonic functions, $\laplacian{u}=\laplacian{v}=0$
+            \item $u,v$ are conjugate harmonic functions, $\grad{u}\cdot\grad{v}=0$
+        \end{itemize}
+        \item $C^1$ complex functions are analytic
+        \item $f(z)~(z-z_0)^N$, zero of order $N$ at $z_0$, $f(z)~(z-z_0)^{-N}$, pole of order $N$
+        \item Laurent series $f(z)=\sum_{-\infty}^{\infty}a_n(z-z_0)^n$, on annulus $\alpha<|z-z_0|<\beta$, infinite $n<0$ means essential singularity
+        \item Radius of convergence: power series $f(z)=\sum_{r=0}^{\infty}a_r z^r$ converges for $z=z_1$, then it converges absolutely for $|z-z_0|<|z_1-z_0|$\begin{itemize}
+            \item $\lim_{r\rightarrow\infty}\left|\frac{a_{r+1}}{a_r}\right| = \frac{1}{R}$
+            \item $\lim_{r\rightarrow\infty}|a_r|^{1/r}=\frac{1}{R}$
+        \end{itemize}
+    \end{enumerate}
+    
+
+    \section*{Series solution of ODE}
+    \begin{enumerate}
+        \item Wronskian $W=\begin{vmatrix}
+            y_1 & y_2\\
+            y_1' & y_2'
+        \end{vmatrix}$
+        \item $W'+p(x)W=0$, $W(x)=C\exp\left(-\int^x p(\zeta)\dd\zeta\right)$, 
+        
+        $y_2(x)=y_1(x)\int^x\frac{W(\eta)}{y_1(\eta)^2}\dd\eta = y_1(x)\int^x\frac{C}{y_1(\eta)^2}\exp\left(-\int^\eta p(\zeta)\dd\zeta\right)$
+        \item $y''+p(z)y'+q(z)=0$
+        \item Ordinary point $p(z),\ q(z)$ analytic at $z=z_0$, regular singular point $(z-z_0)p(z),(z-z_0)^2q(z)$ analytic at $z=z_0$
+        \item $z=z_0$ is ordinary point, two independent solutions like $y=\sum_{n=0}^{\infty}a_n(z-z_0)^n, \quad |z-z_0|<R$
+        \item $z=z_0$ is regular singular point, $y_1=z^{\sigma_1}\sum_{n=0}^{\infty}a_n (z-z_0)^n,\quad a_0\neq 0, \sigma\in\mathbb{C}$
+        \item Indicial equation $\sigma(\sigma-1)+p_0\sigma+q_0 = 0$, $p_0=\lim_{z\rightarrow z_0}((z-z_0)p(z))$, $q_0=\lim_{z\rightarrow z_0}((z-z_0)^2q(z))$
+        \item If $\sigma_1-\sigma_2\in \mathbb{R}$, $\mathrm{Re}(\sigma_1)\geq\mathrm{Re}(\sigma_2)$ another solution is \textcolor{red}{$y_2 = ky_1\log z + z^{\sigma_2}\sum_{0}^{\infty}b_n z^n$}
+        \item Variation of parameters 
+    \end{enumerate}
+
+    \section*{Sturm-Liouville}
+    \begin{enumerate}
+        \item Norm of $u(x)$ is $||u||^2 = \langle u|u\rangle = \int_\alpha^\beta|u(x)|^2\dd x$ is real and $\geq0$.
+        \item If $\langle u|\mathcal{L}v\rangle = \langle \mathcal{L} u|v\rangle = \langle v|\mathcal{L}u\rangle^*$ if boundary terms are 0, called \textbf{self-adjoint}.
+        \item Sturm-Liouville operator defined on $\alpha\leq x\leq\beta$ is $\mathcal{L}=-\dv{x}\left(\rho(x)\dv{x}\right)+\sigma(x)$, $\sigma,\rho$ are real, $\forall\alpha<x<\beta(\rho>0)$\begin{itemize}
+            \item $\langle u|\mathcal{L}v\rangle = \langle v|\mathcal{L} u\rangle^* + [\rho(v{u^{*}}'-u^*v')]^\beta_\alpha$ means formally self-adjoint (differ by a constant)
+            \item If $[\rho(v{u^{*}}'-u^*v')]^\beta_\alpha = 0$, $\mathcal{L}$ is self-adjoint
+            \item Might not work if $\mathcal{L}$ not defined on $x\in[\alpha,\beta]$ e.g.$[-1,1]$ for Legendre's equation $(1-x^2)y''-2xy'+l(l+1)y=0$, solutions $x$ and $\frac{1}{2}\ln(\frac{1+x}{1-x})$ not orthogonal
+        \end{itemize}
+        \item Inner product with a weight function $\langle u|v\rangle_w = \int_\alpha^\beta w(x)u^*(x)v(x)\dd x$
+        \item $\mathcal{L}=w\tilde{\mathcal{L}}$ for a second order operator $\tilde{\mathcal{L}}=-\dv{x}\left[a(x)\dv{x}\right]-b(x)\dv{x}-c(x)$\begin{itemize}
+            \item $w(x)$ is real and positive
+            \item $w\tilde{\mathcal{L}}=-\dv{x}\left(aw\dv{x}\right)+(aw'-bw)\dv{x}-wc$
+            \item Let $aw'=bw$, $w(x)=Ce^{\int^x\frac{b(\zeta)}{a(\zeta)}\dd \zeta}$
+            \item Note that $w(x),a(x),b(x),c(x)$ are real (by definition)
+            \item $\langle u|\tilde{\mathcal{L}}v\rangle_w = \langle \tilde{\mathcal{L}} v| u\rangle_w + [wa(v{u^{*}}'-u^*v')]^\beta_\alpha$
+            \item i.e. $\boxed{(\lambda_u-\lambda_v)\int_a^b u^*vw\dd x=\bigg[\rho(x)({u^*}'v'-u^*v')\bigg]_a^b}$
+            \item $\tilde{\mathcal{L}} y=\lambda y\implies \mathcal{L}y=\lambda wy$
+        \end{itemize}
+        \item If $\{y_n\}$ is a complete set of \textbf{orthonormal} eigenfunctions,
+        
+        the completeness relation is $\boxed{\sum_{n=1}^{\infty}y_{n}(x)y_{n}^{*}(x^{\color{red}{'}})={\frac{1}{w(x^{\prime})}}\delta(x-x^{\color{red}{'}})}$
+        \begin{itemize}
+            \item $f(x)=\sum_{n=1}^{\infty}a_n y_n(x)$
+            \item $\langle y_n|y_m\rangle_w = \delta_{nm}$
+            \item $a_n = \langle y_n|f\rangle_w$
+            \item $f(x)=\sum_{n=1}^{\infty}\langle y_n|f\rangle_w y_n(x) = \int_{\alpha}^{\beta}f(x^{\prime})\left[w(x^{\prime})\sum_{n=1}^{\infty}y_{n}(x)y_{n}^{*}(x^{\prime})\right]\,d x^{\prime}$
+            \item Recall that $\mathcal{L}G(x,x')=\delta(x-x')$, $y(x)=\int_\alpha^\beta G(x,x')f(x')\dd x'$
+            \item $\boxed{G(x,x')=\sum_{n=1}^{\infty}\frac{1}{\lambda_n}y_n(x)y_n^*(x')}$ such that $\mathcal{L}G(x,x')=w(x)\sum_{n=1}^{\infty}y_n(x)y^*_n(x')=\frac{w(x)}{w(x')}\delta(x-x')=\delta(x-x')$ ($\mathcal{L}=\mathcal{L}_x$ acts on $y(x)$ only instead of $y^*(x')$)
+            \item $G(x,x')=G^*(x,x')$, if $\mathcal{L}$ has zero eigenvalue $G(x,x')$ will not exist
+        \end{itemize}
+        \item Bessel's inequality $\|f\|^2_w\geq\sum_{n=1}^{N}|a_n|^2$\begin{itemize}
+            \item $f(x)\approx\sum_{n=1}^{N}a_ny_n$, let $a_n=u+iv$
+            \item Error 
+            \begin{align*}
+                E &= \left|f(x)-\sum_{n=1}^{N}a_ny_n\right|^2_w\\
+                  &= \|f\|^2_w-\sum_{n=1}^{N}[a^*_n\langle y_n|f\rangle_w+a_n\langle f|y_n\rangle_w] + \sum_{n=1}^{N}\sum_{n=1}^{N}a^*_n a_m\langle y_n|y_m\rangle_w \\
+                  &= \|f\|^2_w-\sum_{n=1}^{N}[(u-iv)(\langle y_n|f\rangle_w)^* + (u+iv)\langle f|y_n\rangle_w] + \sum_{n=1}^{N}|a_n|^2 \\
+                  &= \|f\|^2_w + \sum_{n=1}^{N}(u^2+v^2) - \sum_{n=1}^{N}[2u\Re{\langle y_n|f\rangle_w}+2v\Im{\langle y_n|f\rangle_w}]
+            \end{align*}
+            \item If $\pdv{E}{u} = 0 = \pdv{E}{v}$, $a_n=\langle y_n|f\rangle_w$, $E = \|f\|^2_w - \sum_{n=1}^{N}|a_n|^2 \geq 0$, becomes equality at $N\rightarrow\infty$
+        \end{itemize}
+    \end{enumerate}
+
+    \section*{Calculus of variation}
+    \begin{enumerate}
+        \item The functional $G[y] : \{y_k\}\rightarrow\mathbb{R}=\int_\alpha^\beta f(y,y';x)\dd x$
+        \item $\delta G=\int_\alpha^\beta\delta y(x)\frac{\delta G}{\delta y(x)}\dd x+\ldots = \left[\delta y\pdv{f}{y'}\right]_{\alpha}^{\beta}+\int_{\alpha}^{\beta}\delta y\left[\pdv{f}{y}-\dv{x}\left(\pdv{f}{y'}\right)\right]\dd x + \ldots$
+        \item Euler Lagrange equation $\frac{\delta G}{\delta y(x)} = 0 = \pdv{f}{y}-\dv{x}\left(\pdv{f}{y'}\right)$, $\pdv{f}{y} = \dv{x}\left(\pdv{f}{y'}\right)$
+        \item \textbf{First integral} if integrand $f(y,y',x)=f(y,y')$ does not depend on $x$,\begin{align*}
+            \dv{f}{x}&=\pdv{f}{x}+y'\pdv{f}{y}+y''\pdv{f}{y'}\\
+                     &=\pdv{f}{x}+\dv{x}\left(y'\pdv{f}{y'}\right)\\
+            \dv{x}\left(f-y'\pdv{f}{y'}\right)&=\pdv{f}{x}=0\\
+        \end{align*}\begin{center}
+            $\boxed{y'\pdv{f}{y'}-f=c}$
+        \end{center}
+        \item Sturm-Liouville\begin{itemize}
+            \item $F[y]=\langle y|\mathcal{L}y\rangle = \int_\alpha^\beta y^*\mathcal{L}y \dd x = \int_\alpha^\beta \left[\rho|y'|^2+\sigma |y|^2\right] \dd x$
+            \item $G[y]= \langle y|y\rangle_w = \int_\alpha^\beta w|y|^2 \dd x$
+            \item $\frac{\delta F}{\delta y}=2\mathcal{L}y$, $\frac{\delta G}{\delta y}=2wy$
+            \item $\Lambda[y] = \frac{\langle y|\mathcal{L}y\rangle}{\langle y|y\rangle_w} =\frac{F[y]}{G[y]}$
+            \item $\frac{\delta \Lambda}{\delta y}=\frac{1}{G}\left[\frac{\delta F}{\delta y}-\Lambda \frac{\delta G}{\delta y}\right]=\frac{2}{G}\left[\mathcal{L}y-\Lambda wy\right]$
+            \item At extremum, $\mathcal{L}y=\lambda wy=\Lambda[y] wy$, $\Lambda[y]$ is extremized by eigenfunctions of $\tilde{\mathcal{L}}=w^{-1}\mathcal{L}$ and the eigenvalues $\lambda$ are its extremal values
+        \end{itemize}
+        \item \begin{align*}
+            \dv{L}{t} &=\pdv{L}{t}+\sum_{i=1}{N}\dot q_i\pdv{L}{q_i} + \ddot q_i\pdv{L}{\dot q_i}\\
+                      &= \pdv{L}{t}+\sum_{i=1}{N}\dot q_i\dv{t}\pdv{L}{\dot q_i} + \ddot q_i\pdv{L}{\dot q_i}\\
+                      &= \pdv{L}{t}+\dv{t}\sum_{i=1}{N}\dot q_i\pdv{L}{\dot q_i}\\
+            \dv{t}\left[L+\sum_{i=1}^N\dot q_i\pdv{L}{\dot q_i}\right] &= \pdv{L}{t} = \dv{H}{t}
+        \end{align*}
+        \item Time invariance of $L$ is energy ($H$) conservation, $q$ invariance of $L$ is $\pdv{L}{\dot q}$ conservation (generalized momentum)
+        \item $\phi(x,y,\lambda)=f(x,y)-\lambda p(x,y)$, $\Phi_\lambda[y]=G[y]-\lambda P[y]$
+    \end{enumerate}
+
+    \section*{Laplace Poisson}
+    \begin{enumerate}
+        \item Find constants with \textbf{boundary conditions}, implicit conditions for \textbf{physical} solutions, \textbf{continuity of derivative} and \textbf{continuity of solution}
+        \item Poisson's equation $\laplacian\Phi=\rho(\vb{x})$, $\rho=0$ is Laplace's equation\begin{itemize}
+            \item Diffusion $\kappa\laplacian u=\pdv{u}{t}-S(\vb{x})$, in steady state $\pdv{u}{t}=0$. $\laplacian{u}=-\frac{S(\vb{x})}{\kappa}$, \textcolor{red}{flux $\vb{F}=-\kappa\grad u$}
+            \item $\div\vb{E}=\rho_q(\vb{x})/\epsilon_0$, $\curl\vb{E}=0\implies\vb{E}=-\grad\Phi$, $\laplacian{\Phi}=-\rho_q(\vb{x})\epsilon_0$
+            \item $\laplacian{\Phi}=4\pi G\rho_m(\vb{x})$
+            \item 3D Schr\"odinger
+            \item Ideal fluid (irrotational, incompressible) $\curl u=0\implies u=\grad\Phi$, continuity (incompressible) $\rho\div u=-\frac{\rho}{t}=S(\vb{x})$,$\laplacian{\Phi}=0$
+        \end{itemize}
+        \item Cylindrical $\Psi = \Psi(r,\phi)$, $x=r\cos\phi,y=r\sin\phi$, $\laplacian{\Psi}=\frac{1}{r}\pdv{r}\left(r\pdv{\Psi}{r}\right)+\frac{1}{r^2}\pdv[2]{\Psi}{\phi}=0$\[
+            \boxed{\Psi = A_0+B_0\textcolor{red}{\phi}+C_0\textcolor{red}{\ln r}+D_0\textcolor{red}{\phi\ln} r+\sum_{n=1}^{\infty}(A_n r^{\textcolor{red}{n}}+C_n r^{\textcolor{red}{-n}})\cos \textcolor{red}{n}\phi+\sum_{n=1}^{\infty}(B_n r^n+D_n r^{-n})\textcolor{red}{\sin n\phi}}
+        \]
+        \item Axisymmetric Spherical $\Psi=\Psi(r,\theta)$, $x=r\sin\theta\cos\phi, y=r\sin\theta\sin\phi, z=r\cos\theta$, $\laplacian\Psi=\frac{1}{r^2}\pdv{r}\left(r^2\pdv{\Psi}{r}\right)+\frac{1}{r^2\sin\theta}\pdv{\theta}\left(\sin\theta\pdv{\Psi}{\theta}\right)=0$\[
+            \boxed{\Psi(r,\theta)=\sum_{l=0}^{\infty}(A_l r^{\textcolor{red}{l}}+B_l r^{\textcolor{red}{-l-1}})P_l(\textcolor{red}{\cos\theta})}
+        \]
+        \item \begin{tabular}{|Sc|c|c|}
+                $P_1(x)$ & $1$\\
+                $P_2(x)$ & $x$\\
+                $P_3(x)$ & $\frac{1}{2}(\textcolor{red}{3}x^2-\textcolor{red}{1})$\\
+                $P_4(x)$ & $\frac{1}{2}(\textcolor{red}{5}x^3-\textcolor{red}{3}x)$\\
+            \end{tabular}
+        \item The solution to Poisson's equation is unique with Dirichlet ($\Phi(\vb{r})=f(\vb{r})$) or Neumann ($\pdv{\Phi}{n}=\vb{n}\cdot\grad{\Phi}=f(\vb{r})$) boundary conditions on a surface $S$.
+        
+        Prove using difference of two solutions and $\div(\Psi\grad\Psi)=\grad\Psi\cdot\grad\Psi+\Psi\div(\grad\Psi)$
+        \item Green's function \[
+            \begin{cases}
+                \laplacian{G(\vb{r},\vb{r}')}_{\vb{r}}=\delta^{(3)}(\vb{r}-\vb{r}'),&\quad \vb{r}\ in\ V\\
+                (\mathrm{Dirichlet})\ G=0,&\quad \vb{r}\ on\ S\\
+                (\mathrm{Neumann})\ \pdv{G}{n}=\frac{1}{A},&\quad \vb{r}\ on\ S
+            \end{cases}
+        \]\where{$A=\oint_S\dd S$}
+        If $V$ is all of space, $G$ is the \textbf{fundamental solution}.
+        \item The fundamental solution in 3D: $\laplacian{G}=\delta^{(3)}(\vb{r}-\vb{r}')$, $G\rightarrow 0 \qas |\vb{r}|\rightarrow\infty$\begin{itemize}
+            \item Spherically symmetric, $G=G(\vb{r})$
+            \item $\laplacian{G}=(r^2 G')'/r^2=0,\ G=\frac{C}{r}+A$, $A=0$
+            \item $S$ is a sphere of radius $\epsilon$; $\eval{\pdv{G}{r}}_{r=\epsilon}=-\frac{C}{\epsilon^2}$
+            \item $\int_{r<\epsilon}\laplacian{G}\dd V=\oint_{r=\epsilon}\grad G\cdot\vb{n}\dd S=-\frac{C}{\epsilon^2}\oint_{r=\epsilon}\dd S=-4\pi C$
+            \item $\laplacian{G}=\delta^{(3)}(\vb{r}-\vb{r}')=-4\pi C\delta^{(3)}(\vb{r}-\vb{r}')$, $C=-\frac{1}{4\pi}$
+            \item $\boxed{G(\vb{r},\vb{r}')=-\frac{1}{4\pi|\vb{r}-\vb{r}'|}}$
+        \end{itemize}
+        \item The fundamental solution in 2D: $\laplacian{G}=\delta^{(2)}(\vb{r}-\vb{r}')$, $|\grad G|\rightarrow0\ \qas\ |\vb{r}|\rightarrow \infty$ (or $G$ vanishes in a finite radius)\begin{itemize}
+            \item Circularly symmetric, $G=G(\vb{r})$
+            \item $(rG')'/r=0\implies G=C\ln r+A$, $r\neq 0$
+            \item $S$ is a circle with radius $\epsilon$; $\eval{\pdv{G}{r}}_{r=\epsilon} = \frac{C}{\epsilon}$
+            \item $\int_{r<\epsilon}\laplacian{G}\dd A=\oint_{r\epsilon}\grad G\cdot\vb{n}\dd l=\frac{C}{\epsilon}\oint_{r=\epsilon}\dd l=2\pi C$
+            \item $\laplacian{G}=\delta^{(2)}(\vb{r}-\vb{r}')=2\pi C\delta^{(2)}(\vb{r}-\vb{r}')$, $C=\frac{1}{2\pi}$
+            \item $\boxed{G(\vb{r},\vb{r}')=\frac{1}{2\pi}\ln|\vb{r}-\vb{r}'|+C}$
+        \end{itemize}
+        \item Method of images: \textbf{Dirichlet} boundary condition --- charge of \textbf{opposite} sign, to cancel out at the boundary; \textbf{Neumann} --- charge of \textbf{same} sign, to make $\pdv{G}{n}=0$ at the boundary
+        \item For sphere and circle, it is equivalent to a inverse point with a particular strength
+        \item $\vb{F}=\Phi\grad\Psi-\Psi\grad\Phi$, $\div(\Phi\grad\Psi)=\grad\Phi\cdot\grad\Psi+\Phi\laplacian{\Psi}$ leads to Green's theorem\[
+            \boxed{\int_V(\Phi\laplacian{\Psi}-\Psi\laplacian{\Phi})\dd V=\oint_S(\Phi\grad\Psi-\Psi\grad\Phi)\cdot\dd S=\oint_S\left(\Phi\pdv{\Psi}{n}-\Psi\pdv{\Phi}{n}\right)}
+        \] (replace $V$ and $S$ to $A$ and $l$ in 2D)\begin{itemize}
+            \item (Dirichlet) For $\begin{cases}
+                \laplacian{\Phi}&=\rho(\vb{r}),\quad \mathrm{in}\ V\\
+                \Phi(\vb{r})&=f(\vb{r}),\quad \mathrm{on}\ S\\
+            \end{cases}$
+            \item Let \textcolor{red}{$\Psi=G$}, \begin{align*}
+                \int_V (\Phi\laplacian{G}-G\laplacian{\Phi})\dd V &= \oint_S(\Phi\grad G-G\grad\Phi)\cdot\vb{n}\dd S\\
+                \int_V\Phi\delta^{(3)}(\vb{r}-\vb{r}')\dd V &= \int_V G\rho\dd V+\oint_S f\pdv{G}{n}\dd S\\
+                \textcolor{red}{\Phi(\vb{r'})} &= \int_V \rho(\vb{r})G(\vb{r},\vb{r}')\dd V+\oint_S f(\vb{r})\pdv{G}{n}\dd S\\
+                \textcolor{red}{\Phi(\vb{r'})} &= \int_{\real^3} \rho(\vb{r})G(\vb{r},\vb{r}')\dd V = \int_{\real^3}\frac{\rho_q(\vb{r})}{4\pi\epsilon_0|\vb{r}-\vb{r}'|}\dd V
+            \end{align*}
+            The last line is for all space (sphere of radius $\infty$)
+
+            Turn it into Laplace by setting $\forall \vb{r}\in V(\rho(\vb{r})=0)$
+            \item (Neumann) For $\begin{cases}
+                \laplacian{\Phi}&=\rho(\vb{r}),\quad \mathrm{in}\ V\\
+                \pdv{\Phi}{n}&=f(\vb{r}),\quad \mathrm{on}\ S\\
+            \end{cases}$
+            \item Let $G=\Psi$. $\eval{\pdv{G(\vb{r},\vb{r}')}{n}}_{\vb{r}\in S}=\frac{1}{A}$, \begin{align*}
+                \Phi(\vb{r}') &=\int_V\rho(\vb{r})G(\vb{r},\vb{r}')\dd V+\frac{1}{A}\oint_S\Phi(\vb{r})\dd S-\oint_S f(\vb{r})G(\vb{r},\vb{r}')\dd S\\
+                \Phi(\vb{r}') &= \int_V\rho(\vb{r})G(\vb{r},\vb{r}')\dd V-\oint f(\vb{r})G(\vb{r},\vb{r}')\dd S
+            \end{align*}
+            \where{the second line follows from finite surface integral of $\Phi(\vb{r})$ and infinite $A$ of $V$ being all space}
+        \end{itemize}
+    \end{enumerate}
+
+\section*{Cartesian tensors}
+    \begin{enumerate}
+        \item A vector $\vb{v}$ is a set of numbers $v_i$ defined wrt. a set of orthonormal basis vectors $\vb{e}_i$ by $\boxed{v_i'=L_{ij}v_j}$, where $L_{ij}=\vb{e}_i'\cdot\vb{e}_j$ (\fbox{$L_{ij}$ is \textit{orthogonal}, $L^T L=I$})
+        \item $\grad=\vb{e}_i\partial_i$, $\partial_i\equiv\pdv{x_i}$, $\partial{x_i'}=L_{ij}\partial{x_j}$ (by chain rule) ($\grad$ is therefore a vector, but only in Cartesian coordinates, where covectors same as vectors)
+        \item a Cartesian axial vector (pseudo-vector) $a$ is a set of coefficients $a_i$ defined wrt. a set of orthonormal basis vectors $\vb{e}_i$, s.t. $a_i'$ wrt. another orthonormal basis $\vb{e}_i'$ are given by $a'_i=\det(L)L_{ij}a_j$ (same as vector under proper transformation $\det(L)=1$. Not reversed after improper rotations $\det(L)=-1$)
+        \item A Cartesian tensor T of order $n$ has $n$ indices $T_{i_n\ldots i_n}$, defined wrt. a set of orthonormal basis vectors $\vb{e}_i$ that transforms like $\vb{e}_i'=L_{ij}\vb{e}_j$. $\boxed{T'_{i_1\ldots i_n}=L_{i_1j_1}\ldots L_{i_n j_n}T_{i_1\ldots i_n}}$
+        \item Likewise, a Cartesian pseudo-tensor $E$ of order $n$ is $\boxed{E'_{i_1\ldots i_n}=\det(L)L_{i_1j_1}\ldots L_{i_n j_n}E_{i_1\ldots i_n}}$
+        \item $\delta_{ij}$ is a tensor, $\epsilon_{ijk}$ is a pseudo-tensor
+        \item Linear combination of order $n$ tensors are order $n$ tensors (closed under addition)
+        \item Tensor $n$ $\otimes$ tensor $m\rightarrow$ tensor $n+m$; Tensor $n$ $\otimes$ pseudo-tensor $m\rightarrow$ pseudo-tensor $n+m$
+        \item Contraction reduces order $n$ to $n-2$
+        \item \textbf{Symmetric} - same after swapping two indices; \textbf{Antisymmetric} - $\times(-1)$ after swapping. Symmetry is invariant of coordinate system. For symmetric $T_{ijk}$, antisymmetric $E_{pqr}$, \newline
+        $T_{ijk}E_{ijr}=0$
+        \item Any 2nd order tensor expressed as symmetric and antisymmetric tensors $T_{ij}=S_{ij}+A_{ij}$, $S_{ij}=(T_{ij}+T_{ji})/2$, $A_{ij}=(T_{ij}-T_{ji})/2$
+        \item Pseudo-vectors are equivalent to 2nd order antisymmetric tensors $\omega_k=\frac{1}{2}\epsilon_{ijk}A_{jk}$, \[A_{ij}=\epsilon_{ijk}\omega_k = \begin{vmatrix}
+            0 & \omega_3 & -\omega_2\\
+            -\omega_3 & 0 & \omega_1\\
+            \omega_2 & -\omega_1 & 0
+        \end{vmatrix}\]
+        \item Symmetric tensors are sums of a constant and a traceless symmetric tensor $\tilde{S}=S-\frac{\Tr(S)}{3}\mathbb{I}$, $\Tr(\tilde{S})=0$
+        \item Isotropic tensors have same components in all frames $\boxed{T'_{ijk\ldots}=T_{ijk\ldots}}$. The most general isotropic tensors:\begin{itemize}
+            \item 0th order, scalar (all)
+            \item 1th order, only $\vb{0}$ (for both vector \& pseudovector)
+            \item 2nd order, $\lambda\delta_{ij}$, $\lambda$ is a scalar
+            \item 3rd order, $\lambda\epsilon_{ijk}$
+            \item 4th order, $\lambda\delta_{ij}\delta_{kl}+\mu\delta_{ik}\delta_{jl}+\nu\delta_{il}\delta_{jk}$
+        \end{itemize}
+        \item isotropic $\neq$ homogeneous
+    \end{enumerate}
+
+\section*{Contour integration}
+    \begin{enumerate}
+        \item Complex derivative $\dv{f}{z}=\lim_{\delta z\rightarrow0}\frac{f(z+\delta z)-f(z)}{\delta z}$ is the same for all $\delta z$, with $f(z)=u(x,y)+iv(x,y)$, the \textit{Cauchy-Riemann equations} are \[
+                \pdv{u}{x}=\pdv{v}{y}\quad\pdv{v}{x}=-\pdv{u}{y}
+            \]
+            (Or simply $\pdv{f}{z^*}=0=\pdv{(u+iv)}{(x-iy)}$), and $u,v$ are harmonic, $\laplacian{u}=\laplacian{v}=0$, and conjugate harmonic $\grad u\cdot\grad v=0$
+        \item Cauchy's theorem $\boxed{\oint_C f(z)\dd z=0}$ on a simply connected region $R$ without singularity/$f(z)$ being analytic ($C^1$); path independent from $a$ to $b$, $\int_{C_1}f(z)\dd z=\int_{C_2}f(z)\dd z$, if no singularity between $C_1,C_2$
+        \item Laurent series $\boxed{f(z)=\sum_{n=-\infty}^{\infty}a_n(z-z_0)^n}$, on \textbf{annulus} $\alpha<|z-z_0|<\beta$
+        \item The \textbf{residue} of a pole is $a_{-1}$ (coefficient in Laurent series)  For a simple pole, $\mathrm{res}_{z=z_0}f(z)=\lim_{z\rightarrow z_0}\left[(z-z_0)f(z)\right]$; for an $N$-pole, $\boxed{\mathrm{res}_{z=z_0}=\lim_{z\rightarrow z_0}\left[\frac{1}{(N-1)!}\dv{^{(N-1)}}{z^{N-1}}[(z-z_0)^Nf(z)]\right]}$; or just use Laurent series (for essential singularity)
+        \item Residue theorem $\boxed{\oint_C f(z)\dd z=2\pi i\sum_{k=1}^n\mathrm{res}f(z_k)}$, $C$ is \textbf{anticlockwise} and encloses all $z_k$ (hint: Laurent series' negative powers around singularity $z_k$, shrink $C$ to a circle around it/or $\oint_Cf(z)\dd z$ subtract (or add clockwise) integrals of these circles $=0$)
+        \item For \emph{analytic} $f(z)$ on $R$, Cauchy's formula $\boxed{f(z_0)=\frac{1}{2\pi i}\oint_C\frac{f(z)}{z-z_0}\dd z}$, $f^{(n)}(z_0)=\frac{n!}{2\pi i}\oint_C\frac{f(z)}{(z-z_0)^{n+1}}\dd z$, where simple closed anticlockwise $C$. So \emph{analytic complex function is infinitely differentiable}.
+        \item Branch cut for multivalued functions \begin{itemize}
+                \item $\ln(z)=\ln r+i(2n\pi+\theta)$
+                \item $z^{1/a}=re^{i(2n\pi+\theta)/a},\ a>1$
+            \end{itemize}
+        \item Jordan's lemma $\lim_{R\rightarrow\infty}\int_{C_R}g(z)e^{i\lambda z}\dd z=0$ if \begin{itemize}
+                \item $g(z)\rightarrow0$
+                \item $C_R$ is upper semicircle, $\lambda>0$, or
+                \item $C_R$ is lower semicircle, $\lambda<0$
+            \end{itemize}
+        \item Very important inequality in complex analysis \textcolor{red}{$0<\theta<\frac{\pi}{2}$, $\sin x>\frac{2x}{\pi}$}
+            \begin{center}
+                \includegraphics*[width=0.4\linewidth]{complex_analysis_inequality.png}
+            \end{center}
+        \item Gaussian integration lemma $\forall a\in\mathbb{C},\ \int_{-\infty}^{\infty}e^{-(u+a)^2}\dd u=\sqrt{\pi}$
+    \end{enumerate}
+\section*{Small Oscillations}
+    \begin{enumerate}
+        \item $\mathcal{L}=T-V=\frac{1}{2}T_{ij}q_iq_j-\frac{1}{2}V_{ij}q_iq_j$
+        \item $T_{ij}\ddot{q}_j+V_{ij}q_j=0$
+        \item $(-\omega^2\vb{T}+\vb{V})\vb{Q}=\vb{0}$, $\vb{q}=\vb{Q}\sin(\omega(t-t_0))$ or $Q_i=q_i(t-t_0)$ if $\omega=0$
+        \item $\vb{Q}$ is \textbf{generalized engenvector}. $\alpha^{(n)}(t) = Q^{(n)}_iT_{ij}q_j(t)=A^{(n)}\sin\omega_n(t-t_0^{(n)})$ is a \textbf{normal coordinate}. (A variable substitution to get a simple $\textstyle\sin(t-t_0^{(n)})$)
+        \item \textbf{Orthonormality} $(\vb{Q}^{(m)})^T\vb{T}\vb{Q}^{(n)}=\delta_{mn}$
+    \end{enumerate}
+\section*{Group theory}
+    \begin{enumerate}
+        \item A group $(G,*)$ is a set $G$ and a binary operation $*$ satisfying\begin{itemize}
+                \item Identity axiom, $\forall g\in G\exists e,\ e*g=g*e=g$
+                \item Inverses axiom, $\forall g\in G\exists h\in G,\ h*g=g*h=e$
+                \item Associativity axiom, $\forall g,h,k\in G,\ (g*h)*k=g*(h*k)$
+                \item Closedness/Closure, $g_i* g_j\in G$
+            \end{itemize}
+        \item Examples\begin{itemize}
+                \item nonzero complex numbers under multiplication $(\mathbb{C},\times)$
+                \item $2\times2$ invertible matrices/general linear group of degree 2 over real numbers under multiplication $(GL_2(\mathbb{R}),*)$
+                \item $2\times2$ real matrices under addition $M_2(\mathbb{R}, +)$
+                \item Integers under addition $(\mathbb{Z},+)$
+                \item \textbf{Symmetric groups}/\textbf{general permutation groups} $S_n$/$\Sigma_N$, $|S_n|=n!$, defined by $(S,*)$, where $S$ is the set of all permutations of $\{1,2,\ldots,n\}$, $*$ is a bijection from $\{1,2,\ldots,n\}$ to itself.
+                \item $U(n)$, unitary $n\times n$ matrices
+                \item $GL(n,\mathbb{C})$, $n\times n$ invertible matrices
+                \item $S_n$ symmetric group/permutation group, $|S_n|=n!$
+                \item $D_n$ dihedral group, $|D_n|=2n$, $n$ rotations by $\frac{360^\circ}{n}$, $n$ reflections
+                \item Small abelian and non-abelian groups (\href{https://en.wikipedia.org/wiki/List_of_small_groups}{link})
+            \end{itemize}
+        \item \textbf{Order} of a group $G$ - number of elements in it
+        \item $g^q=e$, $q$ is the \textbf{order} of group element $g$ (if does not exist, infinite order)
+        \item A \textbf{cyclic} group satisfies $G=\{g^n:n\in\mathbb{Z}\}$
+        \item $g_1,g_2$ are \textbf{generators} if $G=\{\prod_{n}g_n:n\in\mathbb{Z},g_n\in\{g_1,g_2\}\}$
+        \item A group is \textbf{abelian} if every two elements commute. Cyclic groups are abelian.
+        \item \includegraphics*[width=0.7\linewidth]{group_ring_field.jpg}
+        \item $D_n$, $n$-fold dihedral groups, order $2n$. reflections about diagonal
+        \item Group table: For $g_1g_2$, apply column $g_2$ then row $g_1$. Each row/column is a \textbf{complete rearrangement/derangements} of another.
+        \item A subgroup is a subset that's also a group
+        \item Let $(G,*)$, $(H,\times)$ be groups\begin{itemize}
+            \item A \textbf{group homomorphism} $f:G\rightarrow H$ is a function such that $\forall x,y\in G,\ f(x*y)=f(x)\times f(y)$ (preserve group operation)
+            \item A \textbf{group isomorphism} is a bijective group homomorphism
+            \item (Example of homomorphism but not isomorphism: a subgroup, chosen carefully)
+        \end{itemize}
+        \item If $(H,\times)$ is an isomorphism of $(G,*)$, $H$ are $n\times n$ invertible matrices, $\times$ is matrix multiplication, group $H$ is a \textbf{faithfaul representation} of $G$
+        \item Two elements are \textbf{conjugate}, $g_1\sim g_2$ iff $\exists g,\ g_2=gg_1g^{-1}$
+        \item \textbf{Conjugacy classes} of a group are disjoint classes of elements, where the elements in each of them are mutually conjugate. The conjugacy class of $g$ is $\mathrm{Cl}(g)=\{hgh^{-1}|h\in G\}$
+        \item Conjugacy classes for $D_n$ ($n$th order dihedral groups) are \begin{itemize}
+                \item $\{e\}$
+                \item $\{R^2,\ldots,R^n\}$
+                \item $\{m_1,\ldots,m_n\}$
+            \end{itemize}
+        \item A \textbf{normal subgroup} $H$ is a subgroup that consists entirely of conjugacy classes of $G$. $G$ is a subgroup. A \textbf{proper normal subgroup} is such group with $H\neq G$. $I=e\in G$.
+        \item A group $G$, a subgroup $H=\{I,h_1,h_2\ldots\}$ of $G$, $g\in G$, a \textbf{left coset} of $H$ in $G$ is $gH=\{g,gh_1,gh_2,\ldots\}$, a \textbf{right coset} of $H$ in $G$ is $Hg=\{g,h_1 g,h_2 g,\ldots\}$.
+        \item Properties\begin{itemize}
+                \item $(g_1g_2)^{-1}=g_2^{-1}g_1^{-1}$
+                \item $g_1\sim g_2\implies g_2\sim g_1$
+                \item $g_1\sim g_2, g_2\sim g_3\implies g_1\sim g_3$
+                \item The identity $e$ of any group is a conjugacy class by itself
+                \item Each element of an abelian group is in a class by itself
+                \item $g$ and $g^{-1}$ may or may not be in the same conjugacy class
+                \item The left and right coset of any subgroup $H$ of $G$ are identical if $G$ is abelian
+                \item The left and right coset of any \emph{normal} subgroup $H$ are always identical ($gH=Hg$)\newline
+                        $gh\in gH$, $ghg^{-1}=h_1\in H$ because $H$ is normal, $gh=h_1 g\in Hg$. vice versa.
+                \item Order is the same in cosets $|gH|=|Hg|=|H|$ \newline
+                        elements of cosets are still distinct
+                \item Two cosets are either disjoint or identical \newline
+                        For $Hg_1, Hg_2$, if $h_1g_1=h_2g_2$, $Hg_1=Hh_1^{-1}h_2g_2=Hg_2$ because $h_1^{-1}h_2\in H$
+                \item Two cosets $Hg_1$ and $Hg_2$ are identical iff $g_1g^{-1}_2\in H$
+                \item Every element of $G$ is in some coset
+                \item The subgroup $H$ and its left cosets partition $G$\newline
+                        Because $I\in H$, $\forall g\in G$, $g\in Hg$
+                \item (\textbf{Lagrange's theorem}) \fbox{If $H$ is a subgroup of $G$, $|G|=n|H|,\ n\in\mathbb{Z}^+$}
+                    \where{$n=|G:H|$ is the index of $H$ in $G$, \newline the number of distinct left/right cosets of $H$ in $G$}
+                \item The order of every $g\in G$ divides $|G|$\newline
+                        Each element generates a cyclic subgroup of the same order.\\
+                        If $|G|$ is prime, $G=C_n$ the cyclic group.
+            \end{itemize}
+        \item All order 4 groups are isomorphic to the cyclic group $C_4$ or the \href{https://mathworld.wolfram.com/Vierergruppe.html}{Vierergruppe/Klein four-group}
+        \item The \textbf{kernel} $K$ of group $G$ is the set of all $k$ such that $\Phi(k)=I_H$ (kinda a ``nullspace'' for groups)
+        \item For a homomorphic map $\Phi:G\mapsto H$ between two groups $(G,*)$, $(H,\times)$,\begin{itemize}
+            \item $\Phi(g_1*g_2)=\Phi(g_1)\times\Phi(g_2)$
+            \item (Identity maps to identity) $\Phi(I_G)=I_H$
+            \item (Inverses maps to inverses) $\Phi(g^{-1})=\left[\Phi(g)\right]^{-1}$
+            \item Example: $(\mathbb{R},+)$ and $(U(1),\times)$, where $U(x)=\{c\in\mathbb{C}\ |\ |c|=1\}$, $\Phi(x)=e^{ix}$, $\Phi(x+2\pi)=\Phi(x)$ so only surjective, not bijective. Kernel $K=\{2n\pi\ |\ n\in\mathbb{Z}\}$
+        \end{itemize}
+        \item \fbox{The kernel is a \textbf{normal} subgroup} of $G$ because\begin{itemize}
+                \item It is closed, $\forall k_1,k_2\in K,\ k_1*k_2\in K$
+                \item $I_G\in K$ (identity maps to identity)
+                \item inverse exists, $\forall k\in K,\ k^{-1}\in K$
+                \item $\forall k\in K,\ \Phi(gkg^{-1})=\Phi(g)\Phi(k)\Phi(g^{-1})=\Phi(g)I_H[\Phi(g)]^{-1}=I_H\implies gkg^{-1}\in K$
+            \end{itemize}
+        \item The \textbf{product} of two cosets is the set of all products of two elements from each set $C_1\times C_2=\{c_1c_2\ |\ c_1\in C_1,c_2\in C_2\}$
+        \item The \textbf{direct product} of two groups is similar but forms ordered pairs. $G\times H=\{(g,h)\ |\ g\in G,h\in H\}$\newline
+                And $(g_1,h_1)\cdot(g_2,h_2)=(g_1*g_2,h_2\times h_2)$\newline
+                Example: $D_4 = C_2\times C_2$ ($D_4$ is Klein four group, $C_2$ is 2nd order cyclic group)
+        \item For a \underline{normal subgroup} $K$ of $G$, product of cosets $|(g_1K)(g_2K)|=|K|\neq|K|^2$ (not all distinct)\newline
+                For a $g\in(g_1K)(g_2K)$, $g=g_1k_1g_2k_2=g_1(g_2g_2^{-1})k_1g_2k_2=g_1g_2k_1'k_2 = g_1g_2k_3\in g_1g_2K$
+        \item For a cosets of non-normal groups, $|(g_1K)(g_2K)|\neq|K|$
+        \item A \textbf{quotient group}, $G/K$, for a \underline{normal subgroup} $K$ is a \textcolor{red}{group of its cosets} in $G$.\newline
+                Example: for $D_3$, $H=\{e,r,r^2\}$, $D_3/H=\{H, sH\}$, because $H\cdot H=H, H\cdot sH=sH$, $sH\cdot sH=H$, it's isomorphic to $C_2$
+        \item (\textbf{Factorization theorem})(\href{https://math.libretexts.org/Bookshelves/Abstract_and_Geometric_Algebra/First-Semester_Abstract_Algebra%3A_A_Structural_Approach_(Sklar)/09%3A_The_Isomorphism_Theorem/9.01%3A_The_First_Isomorphism_Theorem}{Proof})\newline
+                \fbox{If $K$ is the kernel of a homomorphism $\Phi:G\mapsto H$, then $G/K$ is isomorphic to $H$.}
+        \item \textbf{Cayley's theorem}: every order-$N$ finite group is isomorphic to a subgroup of $S_n$ ($S_n$ reminds me of power sets)
+        \item $S_{n-1}$ is a subgroup of $S_n$ (fix one item)
+        \item An $n$-cycle in $S_n$ is a permutation that acts only on the positions $p_r,r=1,2,\ldots,n<N$ written as $(p_1,p_2,\ldots,p_n)$ which stands for $\begin{pmatrix}
+                p_1 & p_2 & \cdots & p_n\\
+                p_2 & p_3 & \cdots & p_1
+            \end{pmatrix}$
+        \item Any permutation can be decomposed uniquely into disjoint cycles.\newline
+            \includegraphics*[width=0.6\linewidth]{permutation_example.png}
+        \item A two cycle is a transposition/swap. $S_2=C_2$
+        \item A permutation is odd/even if it is a product of odd/even permutations. An $n$-cycle can be decomposed into $(n-1)$ 2-cycles (decomposition \emph{not unique, not disjoint} in general). $n$ cycles's parity depends on $n-1$.
+        \item The \textbf{cycle shape} of an element $S_n$ is the set of numbers $\{n_2,n_3,\ldots\}$ specifying the number of 2-cycles, 3-cycles,$\ldots$ in the \textbf{unique} decomposition into \textbf{disjoint} cycles.
+        \item The disjoint cycles are the conjugacy classes of $S_n$.
+        \item $G$ is the direct product of $H$ and $J$ ($G=J\times H=H\times J$) if\begin{itemize}
+                \item $H$ and $J$ are \textbf{normal subgroups} of $G$
+                \item $H$ and $J$ are \textbf{disjoint}, apart from the identity
+                \item $G$ is \textbf{generated only by} elements of $H$ and $J$
+            \end{itemize}
+        \item If $G=H\times J$, $G/H$ is isomorphic to $J$\newline
+                $G/H=\{jH\ |\ j\in J\}$, $\Phi:j\mapsto jH$ is a homomorphism because $H$ is normal ($j_1j_2H=(j_1H)(j_2H)$)\newline
+                $j_1\neq j_2\implies j_1H\neq j_2H$, $\Phi$ is 1-1 so also isomorphic.
+    \end{enumerate}
+
+\section*{Representations}
+    \begin{enumerate}
+        \item A n-dimensional \textbf{representation} of a group $G$ is a homomorphism from $G$ to a subgroup of $GL(n,\mathbb{C})$. It's \textbf{faithful} if it's also isomorphic, otherwise \textbf{unfaithful}.
+        \item \textbf{Regular representation} $G$ are matrices $D(g)$ generated by\\ $G=\{g_1=e,g_2,\ldots,g_N\}$, $\textcolor{red}{g^{-1}}G=\{g_{p(1)},g_{p(2)},\ldots,g_{p(N)}\}$,
+                $D_{ij}=\delta_{p(i),j}=\delta_{i,p^{-1}(j)}$\\
+                (Row order of $D(g)$ is element order of $g^{-1}G$, $D(e)=\vb{I}$)
+        \item Two sets of matices are \textbf{equivalent} if they are similar by an invertible matrix $S$ (similarity transformation)
+        \item If complex conjugate matrix $D^*(g)\sim D(g)$ for all $g$, can you make $D(g)$ entirely real? It's unknown, if you can, it's real. Otherwise, $D$ is pseudo-real.
+        \item \textbf{Direct sum} of representations $D^{(1)}(g)\oplus D^{(2)}(g)=\begin{pmatrix}
+                    D^{(1)}(g) & 0\\0 & D^{(2)}(g)
+                \end{pmatrix}$ is a block-diagonal matrix.
+        \item \textbf{Direct product} of representations $\otimes$, equations are cumbersome, better just see its picture.
+        \item The \textbf{character} of a representation is $\{\Tr(D(g))\ |\ g\in G\}$\begin{itemize}
+                \item Due to property of trace, equivalent representation have identical character
+                \item $g$ in the same \emph{conjugacy class} have the same character
+                \item Character of regular representation $\{|G|,0,0,\ldots,0\}$
+            \end{itemize}
+        \item Invariant subspace of a set of linear operations $\{A_i\}$ is\\ $W\subseteq V$ such that $x\in W, \vb{A}_ix\in W$, $\forall A_i\in \{A_i\}$.\\
+            \begin{remark}
+                higher dimensional ``eigenvector''-like stuff
+            \end{remark}
+        \item A representation $\{D(g)\}$ is irreducible representation (\textbf{irrep}) iff $\{0\}$ and $V=\mathbb{C}^n$ are the only invariant subspaces, where dimension of $D(g)$ is $n$.
+        \item A 2D non-abelian representation is irreducible (diagonal matrices are abelian)
+        \item The group-invariant inner product $[\vb{x},\vb{y}]=\sum_{g\in G}(\vb{D}(g)\vb{x},\vb{D}(g)\vb{y})$, where $(\vb{x},\vb{y})=\vb{x}^\dagger\vb{y}$\begin{itemize}
+                \item $(\vb{D}(h)\vb{x},\vb{D}(h)\vb{y})=[\vb{x},\vb{y}]$, $h\in G$
+                \item Length is $[\vb{x},\vb{x}]^{1/2}$
+                \item Group representations $D(g)$ \textbf{unitary} using this inner product (because length preserved), $GL(n,\mathbb{C})$ similar to $U(n)$
+                \item Unitary matrices have orthogonal eigenvectors, thus ``mutually orthogonal invariant subspaces''
+                \item The representations of finite groups can always be taken to be unitary with respect to this inner product, if we use \textbf{orthonormal basis}.
+            \end{itemize}
+        \item All 1D (unfaithful) represetations are irreducible (no subspace that's not $\{0\}$ or itself). Any two different 1D representations are inequivalent.
+        \item Character table of \textbf{irreps} (irreducible representations) of $D_4$\\
+            \begin{center}
+                \includegraphics*[width=0.5\linewidth]{character_table D_4.png}
+            \end{center}
+            \begin{itemize}
+                \item \textcolor{red}{$\chi_i^J$} denotes $i$-th column, $J$-th row in the character table above
+                \item First four unfaithful 1D, last one faithful 2D
+                \item Vertical lines separates conjugacy classes
+                \item Column in different conjugacy classes are orthogonal
+                \item Rows are orthogonal (gridlock orthogonality)
+                \item rows sum to 0, except for the 1st one \mylabel{thm:row_sum}{$\bigstar$}
+                \item (\textbf{Theorem 1}) The number of inequivalent irreps $\rho$ = the number of \textbf{conjugacy classes} $c$ \mylabel{thm:irrep1}{$\bigstar$}\\
+                    (Horizontal, vertical, both 5 cells, counting each conjugacy class as one)
+                \item (\textbf{Theorem 2}) \\Sum of \textbf{squared} dimensions of inequivalent irreps in a conjugacy class = $|G| = \sum_{J=1}^\rho d_{J}^2$ \mylabel{thm:irrep2}{$\bigstar$}\\
+                    (only last/fifth representation 2D, others 1D. $1^2+1^2+1^2+1^2+2^2=8$)\\
+                    A special case of column orthogonality.
+                \item (\textbf{Theorem 3}) The dimension $d_J$ of each irrep \textbf{divides} $|G|$ \mylabel{thm:irrep3}{$\bigstar$}
+                \item (Corollary of 2) Every irrep has dimension $\leq (|G|-1)^{1/2}$, \\
+                        groups with $|G|<5$ cannot have have 2d irrep, they're abelian. \\
+                        Only $|C_5|=5$ because 5 is prime, \\
+                        so smallet non-abelian group is $D_3$, $|D_3|=6$.
+            \end{itemize}
+        \item (\textbf{Schur's 1st lemma}) For two irreps with matrices $D_1(g):U\rightarrow U$, $D_2(g):V\rightarrow V$, define the \emph{intertwining operator} $T:U\rightarrow V$ to be 
+                \[
+                    \forall g\in G,\quad TD_1(g)=D_2(g)T,
+                \] 
+            then \begin{itemize}
+                \item $T=\vb{0}$. The irreps can be equivalent or inequivalent.
+                \item $T$ is invertible, and the irreps must be equivalent. $U=V$ have same dimensions\mylabel{lma:schur1}{$\bigstar$}
+            \end{itemize}
+        \item (\textbf{Schur's 2nd lemma}) A matrix that commutes with all $D(g)$ of an irrep is $T=\lambda\vb{I},\ \lambda\in\mathbb{C}$\mylabel{lma:schur2}{$\bigstar$}
+        \item (\textbf{The grand orthogonality theorem}) Let $D^J(g):G\rightarrow V_J$ be matrices of an irrep, $V_J=\text{GL}_d(\mathbb{C})$, $J$ loops through all \textbf{inequivalent} irreps, \textcolor{red}{$d=\dim V_J$}
+                \[
+                    \frac{1}{|G|}\sum_{g\in G}(D_{ij}^J(g^{-1})) D_{kl}^K(g)=\frac{1}{d}\delta_{jk}\delta_{il}\delta^{JK}
+                \]\where{$\delta^{JJ}=1$ is \textcolor{red}{not summed over} \mylabel{thm:grand_orthogonality}{$\bigstar$}}
+        \item \[
+                \boxed{\sum_{g\in G}D_{ij}^\dagger(g)D_{kl}(g)=\frac{|G|}{d}\delta_{il}\delta_{jk}}
+            \]
+        \item $g$ in same conjugacy class have the same trace/character\\ so character $\chi(g)=\Tr D(g)$ is a \emph{class function}.
+        \item (\textbf{Row orthogonality}) Take trace on boths sides ($i=j,k=l$)\[
+            \sum_{g\in G}\left(\chi^J(g)\right)^*\chi^K(g) = \sum_{i=1}^c |C_i|(\chi^J_i)^*\chi^K_i =|G|\delta^{JK}=\begin{cases}
+                                                                                                                        |G|,& \qif i=j\\
+                                                                                                                        0,& \qif i\neq j
+                                                                                                                    \end{cases}
+            \]\where{$|C_i|$ is size of $C_i$,\\
+                $\chi_i$ is $\chi(g)$ for $g$ in $C_i$,\\
+                $C_i$ is the $i$-th conjugacy class}
+            \begin{remark}
+                $\vb{\chi}$ are $c$-dimensional vectors, for $\rho$ inequivalent irreps, we have $\rho$ distinct $\chi$. \textcolor{red}{$\rho\leq c$} for linear independence
+            \end{remark}
+        \item (\textbf{Column orthogonality}) \mylabel{thm:col_orthog}{$\bigstar$}\[
+                \sum_{J=1}^\rho(\chi_i^J)^*\chi_j^J=\begin{cases}
+                    \frac{|G|}{|C_i|},&\quad \qif i=j\\
+                    0,&\quad \qif i\neq j
+                \end{cases}
+            \]
+            \begin{remark}
+                $\vb{\chi}$ are $\rho$ dimensional vectors, we have $c$ distinct such vectors, \textcolor{red}{$c\leq\rho$}.
+            \end{remark}
+        \item \myref{thm:irrep1} $\rho=c$ because of column and row orthogonality, $c\leq\rho$ and $\rho\leq c$.
+        \item $\chi_1^J=d_J$; for each irrep $J$, $\chi_1=\chi(e)=Tr(I^{(d_J)})=d_J$ is the dimension of the representation.
+        \item \myref{thm:irrep2} From column orthogonality, the first column (identity $e$), $\sum_{J=1}^\rho|\chi_1^J|^2=\sum_{J=1}^\rho d_J^2 = \frac{|G|}{|C_1|}$, $|C_1|$ is the size of first conjugacy class, $\{e\}$, $|C_1|=1$.
+        \item $\chi(D_1(g)\oplus D_2(g))=\chi(D_1(g))+\chi(D_1(g))$,\\ $\chi(D_1(g)\otimes D_2(g))=\chi(D_1(g))\chi(D_1(g))$
+        \item (\textbf{Decomposition} of a reducible representation) \[\vb{S}\vb{D}(g)\vb{S}^{-1}=\bigotimes_{J=1}^\rho \left(\vb{I}^{(n_J)}\otimes\vb{D}^J(g)\right)\]
+                \where{$\vb{I}^{(n)}$ is $n\times n$ identity matrix,\\ $J$ loops through $\rho$ inequivalent irreps,\\ $n_J$ is number of times $J$-th irrep $\vb{D}^J(g)$ occured}
+        \item Take trace on both sides, $\chi(g)=\sum_{J=1}^\rho n_J\chi^J(g)$
+        \item $\boxed{n_J = \langle\chi,\chi^J\rangle = \frac{1}{|G|}\sum_{i}^c |C_i|\chi(g)(\chi^J(g))^* = \frac{1}{|G|}\sum_{g\in G}\chi(g)^*\chi^J(g)}$ is always an \textcolor{red}{integer} (multiplicity of $\chi^J$ in $\chi$)
+        \item \myref{thm:row_sum} Let $\chi^1$ be the trivial irrep (all 1s, so $\chi^1(g)=1$), $\langle\chi^J,\chi^1\rangle=\frac{1}{|G|}\sum_{g\in G}\chi^J(g)=\delta^{J1} \implies \sum_{g\in G}\chi^J(g) = |G|\delta^{J1}$
+    \end{enumerate}
+
+    \section*{Other tricks}
+    \begin{enumerate}
+        \item Remove poles/infinities by introducing a small value, and set it to 0 after all the calculations
+        Examples\begin{itemize}
+            \item (Lecture notes) Evaluate $\frac{1}{2\pi}\int_{-\infty}^{\infty} e^{ikx} \dd k$ by considering $\frac{1}{2\pi}\int_{-\infty}^{\infty} e^{ikx-\epsilon|k|} \dd k$
+            \item (Lecture notes) Prove $\mathcal{F}[H(x-a)]=\frac{e^{-ika}}{\sqrt{2\pi}ik}$ with a similar technique. (Also relate $\mathcal{F}[f]$ with $\mathcal{F}[f']$)
+            \item (Problem sheet 1)
+            
+            \includegraphics*[width=0.8\linewidth]{Mawell_Ampere_Stokes.png}
+            \item (Wikipedia) Sturm-Liouville operator $L=\dv{x}\left[p(x)\dv{x}\right]+q(x)$
+            \item (Wikipedia) Boundary condition operator $\vb{D}u=\begin{pmatrix}
+                \eval{A_1\dv{x}+B_1}_{x=0}\\
+                \eval{A_2\dv{x}+B_2}_{x=l}
+            \end{pmatrix}$
+            \item (Wikipedia) d'Alembert operator $\Box = \partial^\mu\partial_\mu=\eta^{\mu\nu}\partial_\nu\partial_\mu = \frac{1}{c^2}\pdv[2]{t}-\laplacian$
+        \end{itemize}
+    \end{enumerate}
+
+    \section*{Examples}
+    \begin{enumerate}
+        \item $\int_{-\infty}^{+\infty}\frac{\sin^2x}{x^2}\dd x=\pi$, \href{https://math.stackexchange.com/questions/141695/how-to-calculate-the-integral-of-sin2x-x2}{answer}, \href{https://en.wikipedia.org/wiki/Lobachevsky_integral_formula}{a theorem}
+        \item (hint: Feymann's trick) $\int_{-\infty}^{\infty}\frac{x^2e^x}{(e^x+1)^2}\dd x=\pi^2/3$, \href{https://math.stackexchange.com/questions/1801106/how-does-one-integrate-x2-fracexex12}{answer}
+        \item Scale solution $\Phi$ of $\laplacian{\Phi}=0$ to fit similar boundary conditions: $\Phi\left(x,\frac{y}{a}\right)$ is wrong. $\Phi\left(\frac{x}{a},\frac{y}{a}\right)$ is correct (Lent question sheet 4, Q1)
+    \end{enumerate}
+
+    \section*{Proofs}
+    \begin{enumerate}
+        \item \myref{greens}\begin{align*}
+            1 = \lim_{x\rightarrow0}\int_{\zeta-\epsilon}^{\zeta+\epsilon}\delta(x-\zeta)\dd x &= \lim_{x\rightarrow0}\int_{\zeta-\epsilon}^{\zeta+\epsilon}\mathcal{L}G(x,\zeta)\dd x\\
+            &= \lim_{x\rightarrow0}\int_{\zeta-\epsilon}^{\zeta+\epsilon}\left(\pdv[2]{G}{x}+p(x)\pdv{G}{x}+qG\right)\dd x\\
+            &= \lim_{x\rightarrow0}\int_{\zeta-\epsilon}^{\zeta+\epsilon}\pdv{x}\left(\pdv{G}{x}+pG\right) + \left(-\pdv{p}{x}+q\right)G\dd x\\
+            &= \lim_{x\rightarrow0}\int_{\zeta-\epsilon}^{\zeta+\epsilon}\pdv{x}\left(\pdv{G}{x}+pG\right)\dd x\\
+            &= \lim_{x\rightarrow0}\left[\pdv{G}{x}+pG\right]_{\zeta-\epsilon}^{\zeta+\epsilon}
+        \end{align*} \wher{because $p,q$ are continuous}
+        Thus $G$ is continuous, satisfies the same boundary condition as $y$ and $\lim_{x\rightarrow0}\left[\pdv{G}{x}\right]_{\zeta-\epsilon}^{\zeta+\epsilon}=1$.
+        \item Schur's first lemma \myref{lma:schur1}\begin{itemize}
+                \item Show $\mathrm{Kernel}(T)\subseteq U$ and $\mathrm{Image}(T)\subseteq V$ are invariant subspaces of $\{D_1(g)\ |\ g\in G\}$ and $\{D_2(g)\ |\ g\in G\}$ by using definitions on elements in them
+                \item If $T\neq\vb{0}$, $\mathrm{Kernel}(T)=\{0\}$, $\mathrm{Image}(T)=V$, so $T$ is one-to-one and onto, invertible
+                \item $D_1(g)=T^{-1}D_2(g)T$, the two irreps are equivalent
+            \end{itemize}
+        \item Schur's second lemma \myref{lma:schur2}\begin{itemize}
+                \item $D(g)T=TD(g)$
+                \item whether $T$ is singular or not, $T-\lambda I$ is singular, where $\lambda$ is one of its eigenvalues
+                \item $D(g)T-\lambda D(g)=TD(g)-\lambda D(g)$, $D(g)(T-\lambda I)=(T-\lambda I)D(g)$
+                \item use first lemma, $T-\lambda I$ is invertible or $0$
+                \item $T-\lambda I=0$, $T=\lambda I$
+                \item Better explanantion \href{https://sites.ualberta.ca/~vbouchar/MAPH464/section-schur.html}{here}
+            \end{itemize}
+        \item Grand orthogonality theorem \myref{thm:grand_orthogonality}\begin{itemize}
+                \item Let $d=\dim V_J$, $M$ be any $d\times d$ matrix, $T=\sum_{g\in G}D^J(g^{-1})MD^K(g)$
+                \item $gG=G$, element on whole group causes a derangement, $D^J(g)T=T=TD^K(g)$
+                \item If $J=K$, use Schur's second lemma, $T=\lambda(M)\vb{I}\delta^{JK}$
+                \item $\sum_{g\in G}D^J_{ij}(g^{-1})M_{jk}D^K_{kl}(g)=\lambda(M)\delta_{il}\delta^{JK}$, $\lambda$ depends on $M$
+                \item $\sum_{g\in G}D^J_{ij}(g^{-1})D^K_{kl}(g)=\lambda_{jk}\delta_{il}\delta^{JK}$, where $\lambda_{jk}=\lambda(M^{jk})$, $M^{jk}$ has 1 at $M_{jk}$, otherwise 0
+                \item $\lambda_{jk}\delta_{ii}\delta^{JJ}=\sum_{g\in G}D^J_{ij}(g^{-1})D^J_{ki}(g)=\sum_{g\in G}D_{ij}^J(g^{-1})D_{jk}^J(g)D_{jk}^J(g^{-1})D^J_{ki}(g)\\\null\qquad\qquad=\sum_{g\in G}D^J_{ik}(e)D^J_{ki}(e)=\sum_{g\in G}D_{jk}(e)=\sum_{g\in G}\delta_{jk}=|G|\delta_{jk}$\\
+                $\delta_{ii}=d$, $\delta^{JJ}=1$ because $J$ is not summed over
+                \item $\lambda_{jk}=\frac{1}{d}|G|\delta_{jk}$
+                \item $D(g^{-1})=(D(g))^{-1}=(D(g))^\dagger$ because $D$ is unitary wrt. group invariant inner product
+                \item $ \frac{1}{|G|}\sum_{g\in G}(D_{ij}^J(g^{-1}))^\dagger D_{kl}^K(g)=\frac{1}{d}\delta_{jk}\delta_{il}\delta^{JK}$
+            \end{itemize}
+        \item Column orthogonality of character table \myref{thm:col_orthog}\begin{itemize}
+                \item Not obvious but \href{https://people.brandeis.edu/~igusa/Math101bS07/Math101b_notesD2e.pdf}{here we are}
+                \item $\langle\chi_i^J,\chi_i^K\rangle=\frac{1}{|G|}\sum_{i=1}^c|C_i|(\chi_i^J)\chi_i^K=\delta^{JK}$
+                \item Define character table matrix $\vb{X}$ using $\vb{X}_{iJ}=\chi^J_i$ (subscript horizontal/$G$, superscript vertical/$C_i$)
+                \item $\vb{I}=\vb{X}\frac{1}{|G|}\begin{pmatrix}
+                        |C_1| & \cdots & 0\\
+                        0 & \ddots & 0\\
+                        0 & \cdots & |C_c|
+                    \end{pmatrix}\vb{X}^T=\vb{X}\vb{D}\vb{X}^T$
+                \item $\vb{X}$ is $\rho\times c$, $\vb{D}$ is $c\times c$, so it fits. $\rho\neq c$ in general, yet.
+                \item $\vb{X}\vb{D}\vb{X}^T=I, \vb{X}^T=\vb{D}^{-1}\vb{X}^{-1}, \vb{X}^{T}\vb{X}=\vb{D}^{-1}=|G|\begin{pmatrix}
+                        \frac{1}{|C_1|} & \cdots & 0\\
+                        0 & \ddots & 0\\
+                        0 & \cdots & \frac{1}{|C_c|}
+                    \end{pmatrix}$
+                \item Products of columns of $\vb{X}$ goes to diagonal
+                \item take $(\cdot)_{ij}$ on both sides, $\sum_{J=1}^\rho \chi^J_i\chi^J_j = \begin{cases}
+                        \frac{|G|}{|C_i|} \qor \frac{|G|}{|C_j|},&\quad \qif i=j\\
+                        0,&\quad \qif i\neq j
+                    \end{cases}$
+            \end{itemize}
+        \item \myref{thm:irrep3} Proof \href{https://math.stackexchange.com/questions/243221/proofs-that-the-degree-of-an-irrep-divides-the-order-of-a-group}{here}\begin{itemize}
+                \item Because I just want to sleep, see link above
+                \item I would rather just start over everything reading abstract algebra in the future
+            \end{itemize}
+    \end{enumerate}
+
+\end{document}

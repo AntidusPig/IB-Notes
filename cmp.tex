@@ -1,0 +1,620 @@
+\documentclass{article}
+\usepackage{amsmath, amssymb, amsthm, amsfonts, bm}
+\theoremstyle{remark}
+\newtheorem*{theorem}{Theorem}
+\newtheorem*{remark}{Remark}
+\newtheorem*{definition}{Definition}
+\newtheorem*{hypothesis}{Hypothesis}
+\newtheorem*{corollary}{Corollary}
+\theoremstyle{remark}
+
+\usepackage{physics}
+\usepackage[a4paper, total={6in,10in}]{geometry}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true, linkcolor=ForestGreen}
+\usepackage{graphicx}
+\graphicspath{{./img/}}
+\usepackage{tikz}
+\usepackage{ragged2e}
+\usepackage{caption}
+
+\usepackage{cellspace} 
+\newcolumntype{L}[1]{>{\centering\arraybackslash}m{#1}}
+\usepackage{makecell}
+\setlength{\cellspacetoplimit}{6pt}
+\setlength{\cellspacebottomlimit}{6pt}
+
+
+\usepackage{soul}
+\everymath{\displaystyle}
+
+\usepackage{empheq}
+\usepackage{framed}
+\usepackage{mathtools}
+
+\newcommand{\where}[1]{\begin{flushright}where #1.\end{flushright}}
+\newcommand{\wher}[1]{\begin{flushright}#1.\end{flushright}}
+\newcommand{\mylabel}[2]{\hyperref[#1]{#2}\label{back:#1}}
+\newcommand{\myref}[1]{\hyperref[back:#1]{$\bigstar$}\label{#1}}
+\newcommand{\e}{\hat{\vb{e}}}  % unit vector
+\newcommand{\realp}[1]{\mathfrak{R}(#1)}
+\begin{document}
+
+\title{Condensed Matter Intro}
+\maketitle
+
+\section*{Phonons}
+\begin{enumerate}
+    \item Planes indicated by three points on-axis: $(1,0,0), (\overline{1},0,1)$ with basis $\vb{a},\vb{b},\vb{c}$, plane $(u,v,w)$ is perpendicular to $\vb{r}=u\vb{a}+v\vb{b}+w\vb{c}$ (Passes through points $\frac{\vb{a}}{u}$, $\frac{\vb{b}}{v}$, $\frac{\vb{c}}{w}$)
+    \item The electron number density $n(x)=\sum_p n_p e^{i2\pi px/a}$, in 3D
+    \begin{align}
+            n(\vb{r}) &= \sum_G n_G e^{i\vb{G}\cdot\vb{r}}\\
+            \vb{G}_{hkl} &= h\vb{A}+k\vb{B}+l\vb{C}\\
+            \vb{A}=2\pi\frac{\vb{b}\times\vb{c}}{\vb{a}\cdot\vb{b}\times\vb{c}}\quad \vb{B}&=2\pi\frac{\vb{c}\times\vb{a}}{\vb{a}\cdot\vb{b}\times\vb{c}} \quad \vb{C}=2\pi\frac{\vb{a}\times\vb{b}}{\vb{a}\cdot\vb{b}\times\vb{c}}\\
+            \vb{A}\cdot\vb{a} = 2\pi\quad \vb{A}\cdot\vb{b}&= 0\quad \vb{A}\cdot\vb{c}=0\label{eq1}\\
+            f(\vb{r}) &= \sum_{h,k,l=-\infty}^\infty C_{hkl}e^{i\vb{G}_{hkl}\cdot\vb{r}}
+        \end{align}
+        \where{$\vb{G}$ and $\vb{A}$ are reciprocal lattice vectors}
+        Because of equation (\ref{eq1}), the \textit{atomic form factor} $f(\vb{r})=f(\vb{r}+\vb{r}_{uvw}')$ for integer $u,v,w$.
+    \item \quad
+    
+    \begin{center}
+        \includegraphics*[width=0.8\linewidth]{cmp_diffraction.png}
+    \end{center}
+    The scattering amplitude is $F=\int n(\vb{r})e^{i(\vb{k}-\vb{k}')\cdot\vb{r}}\dd V=\int n(\vb{r})e^{-i\Delta\vb{k}\cdot\vb{r}}\dd V = \sum_G\int n_G e^{i(G-\Delta\vb{k})\cdot\vb{r}}\dd V$
+
+    The scattering vector is $\Delta\vb{k} = \vb{k}'-\vb{k}$, for large (infinite) lattice, scattering happens if $\boxed{\Delta\vb{k} = \vb{G}}$. (Laue equation, \mylabel{thm:diffrac_proof}{Proof})
+
+    In elastic scattering, photon energy conserves, $k^2 = k'^2 = (\vb{k}+\vb{G})^2$, $2\vb{k}\cdot\vb{G}+G^2$, graphically using Ewald's sphere\begin{center}
+        \includegraphics*[width=0.5\linewidth]{Ewald's sphere.png}
+    \end{center}
+    \item The first Brillouin zone is the \emph{Voronoi cell} around the \emph{reciprocal lattice point} at origin in the \emph{reciprocal lattice}. $\vb{k}$ on its edge satisfies $\vb{k}\cdot\vb{G} = \frac{1}{2}G^2$ and can be scattered.
+    \item \quad
+    \begin{center}
+        \includegraphics*[width=0.6\linewidth]{cmp_particle_symbols.png}
+    \end{center}
+    \item \fbox{Phonons are (quantized) normals modes} in lattice vibration. \textit{Inelastic} scattering involves phonons.\begin{itemize}
+        \item Dispersion relation of phonon (1D):\mylabel{thm:phonon_disper}{$\bigstar$}\newline
+        \begin{minipage}{0.2\linewidth}
+            \includegraphics*[width=\linewidth]{cmp_phonon_dispersion.png}
+        \end{minipage}
+        \begin{minipage}{0.7\linewidth}
+            $\boxed{\omega(q)=\sqrt{\frac{4k}{m}}\left|\sin\left(\frac{qa}{2}\right)\right|}$
+            \where{$k$ is spring constant,\newline $a$ is orignal length,\newline $q$ is phonon wavevector(wavenumber)}
+        \end{minipage}
+        \item Long wavelength limit ($q\rightarrow0$), $\omega(q)\approx\sqrt{\frac{k}{m}}qa$\newline$v_p=\frac{\omega}{q}=\sqrt{\frac{ka}{m/a}} = \sqrt{\frac{Y}{\rho}}$
+        \where{$Y$ is Young's modulus}
+        (In the limit of small $a$ and large $\lambda$, $v_p$ tends to the continuum speed of sound)
+        \item $\vb{K} = \vb{q}+\vb{G}$, because $\omega(\vb{q})$ has period $\vb{G}$
+        \item Energy conservation $\hbar\omega=\frac{\hbar^2}{2m}\left(k_i^2-k_f^2\right)$ (\textcolor{red}{TODO:Prove it})
+        \item Inelastic diffraction condition $\boxed{\vb{k}=\vb{k}'\pm\vb{K}}$ (Momentum conservation for creation/annihilation)
+    \end{itemize}
+    \item Diatomic lattice
+        $\omega^2=\frac{k}{m_A m_B}\left[(m_A+m_B)\pm\sqrt{(m_A+m_B)^2-4m_Am_B\sin^2(qa)}\right]$
+        \mylabel{thm:diatomic_dispersion}{$\bigstar$}
+        \begin{center}
+            \includegraphics*[width=0.4\linewidth]{cmp_diatomic_modes.png}
+        \end{center}
+        The two solutions are two modes. \textcolor{green}{Optical mode} due to EM radiation and \textcolor{red}{acoustic mode} due to sound-waves.
+        Brillouin zone is halved. ($a$ is half of the Wigner-Seitz unit cell width)\newline
+        (WLOG assume \textcolor{red}{$m_A-m_B>0$}, $m_A$ is heavier)
+        \begin{center}
+            \begin{tabular}{|Sc|c|c|}
+                \hline$\omega$ & \textcolor{green}{optical} & \textcolor{red}{acoustic}\\\hline
+                $q=\pm\frac{\pi}{2a}$ & $\sqrt{\frac{2k}{m_B}}$ & $\sqrt{\frac{2k}{m_A}}$\\\hline
+                $q\rightarrow0$ & $\omega=\frac{2k(m_A+m_B)}{m_Am_B}=\sqrt{\frac{2k}{\mu}}$ & $\omega\approx\sqrt{\frac{2k}{m_A+m_B}}aq$\\\hline
+            \end{tabular}
+        \end{center}
+        \where{$\mu$ is the reduced mass}
+        Plug into $(m_A\omega^2-2k)U_1+2k\cos(qa)U_2 = 0$
+        \begin{center}
+            \begin{tabular}{|Sc|c|c|}
+                \hline$U_1/U_2$ & \textcolor{green}{optical} & \textcolor{red}{acoustic}\\\hline
+                $q=\pm\frac{\pi}{2a}$ & 0 & $\pm\infty$\\\hline
+                $q\rightarrow0$ & $-m_B/m_A$ & $1$\\\hline
+            \end{tabular}
+        \end{center}
+
+        If $\lambda=\infty$, waves in optical mode out of phase with fixed CoM, in acoustic mode moves in phase;
+        If $\lambda=4a$, standing waves occur at the Brillouin zone boundary. In optical mode heavier atoms $A$ fixed; In acoustic mode lighter atoms $B$ fixed.
+        
+    \item Phonons in 3D\begin{itemize}
+        \item Along 3 directions $(001),(110),(111)$
+        \item Longitudinal and transverse modes $L$ and $T$. The latter is degenerate except for $(110)$
+        \item Diatomic have $L$, $T$ combined with $A$, $O$, plus $T(x,y)$ and $T(z)$ for $(110)$ (NaCl example:)
+            \begin{center}
+                \includegraphics*[width=0.4\linewidth]{cmp_dispersion_3d_nacl.png}
+            \end{center}
+        \item Van der Waals in Neon is weaker than ionic in NaCl, smaller $k$ means lower $\omega$
+    \end{itemize}
+    
+    \item In insulating crystals, thermal energy is stored in the phonons; each mode has energy $E=(n+\frac{1}{2})\hbar\omega$, where $n$ is the number of phonons in it.
+    \item Heat capacity\begin{itemize}
+        \item Each mode has energy $E=(n+\frac{1}{2})\hbar\omega$ with $n$ phonons in it
+        \item Zero phonon energy $\frac{1}{2}\hbar\omega$ can be ignored without harm
+        \item Boltzmann factor $P_n=\exp\left(-\frac{E_n}{k_B T}\right)$ is the ratio of probabilities relative to that of 0 phonon.
+        \item In the $i$-th mode, $E_i = \sum_{n=0}^\infty P_n E_n = \frac{\sum_{n=0}^\infty n\hbar\omega\exp\left(-\frac{n\hbar\omega_i}{k_B T}\right)}{\sum_{n=0}^\infty\exp\left(\frac{-n\hbar\omega_i}{k_B T}\right)} = \frac{\hbar\omega_i}{\exp\left(\frac{\hbar\omega_i}{k_BT}\right)-1}$
+        \item $N$ atoms in 3D have $3N$ modes
+        \item At high temperatures, $E_i\approx k_B T$, $U=3Nk_B T$, $C=\pdv{U}{T}=3Nk_B$, Dulong-Petit Law: heat capacity at high temperature is $3R$
+        \item At low temperatures, $E_i\approx\hbar\omega_i\exp\left(\frac{-\hbar\omega_i}{k_B T}\right)$
+        \item At normal temperatures, \[U=\sum_{i=1}^N\frac{\hbar\omega_i}{\exp\left(\frac{\hbar\omega_i}{k_BT}\right)-1}\approx\int_0^{3N}\frac{\hbar\omega_i}{\exp\left(\frac{\hbar\omega_i}{k_BT}\right)-1}\dd N=\int_0^\infty\frac{\hbar\omega_i}{\exp\left(\frac{\hbar\omega_i}{k_BT}\right)-1}g(\omega)\dd\omega,\] \where{$\dd N=g(\omega)\dd\omega$, $g(\omega)=\dv{N}{\omega}$ is the density of states}
+        \item $\textcolor{red}{3}N=\int_0^{\omega_D}g(\omega)\dd\omega$
+        \item Debye model approximates $g(\omega)$\begin{center}
+            \includegraphics*[width=0.4\linewidth]{Debye model.png}
+            \end{center}
+            Assume \hl{standing waves} in a box of sides $A,B,C$, $\vb{k}=(\frac{n_x\pi}{A},\frac{n_y\pi}{B},\frac{n_z\pi}{C})$.
+            
+            In $k$ space, $\vb{k}$ are the dots, number of such dots in $k<|\vb{k}|<k+\dd k$ is approximately the volume of the shell($\frac{1}{8}4\pi k^2\dd k$) $\times$ density of the dots ($\frac{ABC}{\pi^3}$).
+            The number of states is the sum of number of dots in the \hl{3 modes} (\hl{2 transverse, 1 longitudinal}).
+            \begin{minipage}{0.5\linewidth}
+                \begin{center}
+                    \includegraphics*[width=0.4\linewidth]{cmp_debye_count_N.png}
+                \end{center}
+            \end{minipage}
+            \begin{minipage}{0.5\linewidth}
+                \begin{align*}
+                    \dd N &= g(k)\dd k=\frac{3\pi k^2\dd k}{2\pi^3/ABC}\\
+                    g(k) &= \frac{3Vk^2}{2\pi^2}\\
+                    g(\omega) &= g(k)\dv{k}{\omega}
+                \end{align*}
+            \end{minipage}
+            
+            Assume $k$ is small so phonon is not dispersive, $\omega=v_s k$, $g(\omega) = \frac{3V\omega^2}{2\pi^2v_s^3}$
+            
+            $3N = \int_0^{\omega_D}g(\omega)\dd\omega\implies\boxed{ \omega_D^3=\frac{6\pi^2v_s^3N}{V}}$ is the Debye frequency\newline
+            $U = \frac{3V\hbar}{2\pi^2v_s^3}\int_0^{\omega_D}\frac{\omega^3}{\exp(\hbar\omega/k_B T)-1}\dd\omega$\newline
+            Longitudinal and transverse wave velocities are different, so $\frac{1}{v_s^3}=\frac{1}{3}\left(\frac{1}{v_L^3}+\frac{2}{v_T^3}\right)$\newline
+            \begin{align*}
+                C = \pdv{U}{T}=\frac{3V\hbar}{2\pi^2v_s^3}\int_0^{\omega_D}\omega^3\frac{\frac{\hbar\omega}{k_B T^2}\exp(\hbar\omega/k_BT)}{[\exp(\hbar\omega/k_BT)-1]^2}\dd\omega\\
+                \boxed{C = 9Nk_B\left(\frac{T}{\theta_D}\right)^3\int_0^{\theta_D/T}\frac{x^4 e^x}{(e^x-1)^2}\dd x}
+            \end{align*}
+            \where{$\boxed{\theta_D=\frac{\hbar\omega_D}{k_B}}$ is Debye temperature, $x=\theta_D/T$}
+            \item At high temperatures, \hl{Dulong-Petit Law}: \\\[C\approx 9Nk_B\left(\frac{T}{\theta_D}\right)^3\int_0^{\theta_D/T}x^2\dd x=\boxed{3Nk_B}\]
+            \item At low temperatures, \hl{Debye $T^3$ Law}: \\\[C=9Nk_B\left(\frac{T}{\theta_D}\right)^3\int_0^\infty x^4\frac{e^x}{(e^x-1)^2}\dd x = 9Nk_B\left(\frac{T}{\theta_D}\right)^3\frac{4\pi^4}{15}\propto T^3\]
+            \item Moving down groups in periodic table, $v_s$ and $\theta_D$ decreases. (with some exceptions like carbon)
+            \item Debye model works good only \hl{at low $q$} (at high $q$, near Brillouin zone boundary, \hl{non-dispersive assumption} fails).
+            Measured $g(\omega)$ is complicated because transverse and longitudinal dispersion relations are different.
+            the 3D 1st Brillouin zone has a complicated shape.
+        \end{itemize}
+        \item Thermal conductivity $\boxed{\kappa=\frac{1}{3}C\langle v\rangle l}$,\mylabel{thm:thermal_conductiv}{$\bigstar$} \where{$C=3\frac{N}{V}k_B$ is the heat capacity per \textcolor{red}{unit volume},\newline$\langle v\rangle$ is the average speed,\newline $l$ is the phonon mean free path}
+        \item Scattering reduces mean free path $l$, reduces thermal conductivity $\kappa$\begin{itemize}
+            \item \hl{Geometric} scattering - impurities, grain boundaries, sample boundaries, \begin{itemize}
+                \item dominant \textcolor{red}{at low $T$}, with long $l$, $l=D$ where $D$ is size the of sample
+                \item $\kappa$ is higher for pure crystals
+                \item $\boxed{\kappa\propto C\propto T^3}$
+            \end{itemize}
+            \item \hl{Phonon-phonon} scattering\begin{itemize}
+                \item anharmonic lattice only
+                \item dominant \textcolor{red}{at high $T$}, $C\approx 3nk_B$, $n\propto T$, $\boxed{\kappa\propto l\propto1/T}$
+                \item \textit{Normal} process $N$, $\vb{K}_1+\vb{K}_2=\vb{K}_3$, phonon momentum $\vb{J}=\sum_{\vb{K}} n_{\vb{K}}\hbar\vb{K}$ conserved $\neq0$, no effect on $\kappa$
+                \item \textit{Umklapp} process $U$, $\vb{K}_1+\vb{K}_2=\vb{K}_3+\vb{G}$ ($\vb{K}_1,\vb{K}_2$ near edge of Brillouin zone/high $T$), negative group velocity.
+                \item As temperature decrease from 1000K, $\kappa$ gets slightly bigger than $1/T$ line, because lower temperature, less Umklapp, more normal. 
+                    Less negative group velocity, higher average group velocity, higher thermal conductivity.
+            \end{itemize}
+            \begin{center}
+                \includegraphics*[width=0.4\linewidth]{cmp_kappa_vs._T.png}
+            \end{center}
+    \end{itemize}
+\end{enumerate}
+
+
+\section*{Free electrons}
+
+\begin{enumerate}
+    \item Classical Drude model, free electron are pinballs.\\  \begin{tabular}{Sc|c}
+        Can describe & Cannot describe\\\hline
+        Electrical conductivity & Electron heat capacity $C_{el}$, too large\\
+        Optical reflectivity & Sign of Hall coefficient\\
+        Thermal conductivity & Existence and properties of conductors, semiconductors, insulators
+    \end{tabular}
+    \item Hall coefficient and semiconductors are only explained using \emph{nearly free electrons model}.
+    \item \textit{Fermi energy} $\epsilon_F$ is the highest electron energy in the ground state (at $T=0$) of the $N$ electron system; or simply $\mu(T=0)$. Electrons takes lowest possible energy states with Pauli exclusion principle, inside a sphere with radius $k_F$, the \textit{Fermi wavevector}.
+    The picture shows a \textit{Fermi sphere}, a \textit{Fermi surface}.\newline
+        \begin{minipage}{0.3\linewidth}
+            \begin{center}
+                \includegraphics*[width=\linewidth]{cmp_Fermi_energy.png}
+            \end{center}
+        \end{minipage}
+        \begin{minipage}{0.69\linewidth}
+            \begin{align*}
+                N &= 2\cdot\frac{4\pi k_F^3/3}{8\pi^3/V} = \frac{Vk_F^3}{3\pi^2}\\
+                k_F^3 &= 3\pi^2\frac{N}{V}=3\pi^2n\\
+                \epsilon_F &= \frac{\hbar^2}{2m}k_F^2 = \frac{\hbar^2}{2m}\left(3\pi^2 n\right)^{2/3}
+            \end{align*}
+        \end{minipage}
+    \item Free electron model, similarly, \begin{itemize}
+            \item not standing waves but \hl{cyclic travelling waves} $\psi(x,y,z)\propto e^{ik_x x}e^{ik_y y}e^{ik_z z}$
+            \item $\vb{k} = (\pm\frac{2\pi n_x}{A},\pm\frac{2\pi n_y}{B},\pm\frac{2\pi n_z}{C})$
+            \item $\boxed{g(k)=\frac{Vk^2}{\pi^2}}$ (2 modes instead of 3 for two spins)
+            \item density of states wrt. energy $\boxed{\epsilon = \frac{mv^2}{2} = \frac{\hbar^2k^2}{2m}}$, $\boxed{g(\epsilon)=\frac{V}{2\pi^2}\left(\frac{2m}{\hbar^2}\right)^{3/2}\epsilon^{1/2} = \frac{3N}{2\epsilon}}$
+            \item can confine electrons to 2D, 1D, even 0D, $g(\epsilon)$ also different
+        \end{itemize}
+        \begin{minipage}{0.3\linewidth}
+            \begin{center}
+                \includegraphics*[width=\linewidth]{cmp_drude_model.png}
+            \end{center}
+        \end{minipage}
+        \begin{minipage}{0.69\linewidth}
+            \begin{center}
+                \includegraphics*[width=\linewidth]{cmp_g_diff_dims.png}
+            \end{center}
+        \end{minipage}
+    \item Fermi Dirac distribution/function $p_F(\epsilon, T, \mu) = \frac{1}{1+\exp(\frac{\epsilon-\mu}{k_BT})}$ \mylabel{thm:Fermi_Dirac}{(Proof)}\begin{itemize}
+            \item Step function $1-u_\mu(\epsilon)$ at $T=0$
+            \item $p_F(\mu)=0.5$
+            \item At temperature $T\neq 0$, electron distribution is $g(\epsilon)\cdot p_F(\epsilon)$\begin{center}
+                \includegraphics*[width=0.35\linewidth]{cmp_Fermi_distri.png}
+            \end{center}
+            \item The chemical potential is a function of temperature, $\mu=\mu(T)$, $\mu(T=0)=\epsilon_F$\\
+                \fbox{It varies to keep $\int_0^\infty p_F(\epsilon)g(\epsilon)\dd\epsilon=N$}\\
+                ($g(\epsilon)\propto\epsilon^{-1/2},\epsilon^0,\epsilon^{1/2}$ for 1D, 2D, 3D, $p_F(\epsilon)$ is symmetrical about $\epsilon=\mu$\\
+                as temperature increase, $\mu$ goes \textcolor{red}{up/constant/down})
+                \begin{center}
+                    \includegraphics*[width=0.4\linewidth]{cmp_mu(T).png}
+                \end{center}
+                In 3D, $\mu(T)\sim\epsilon_F-\alpha T^2$. For small $T$ we assume $\mu(T)=\mu(0)=\epsilon_F$ ($\tau=k_B T$ in the picture)
+            \item For low $T$, $U_{el}=\int_0^\infty\frac{\epsilon g(\epsilon)}{\exp((\epsilon-\mu)/k_BT)+1}\dd\epsilon$ \mylabel{thm:electronic_heat_capacity}{$\bigstar$}
+            \item $C_{el} = \pdv{U_{el}}{T}\approx\boxed{\frac{\pi^2}{2}Nk_B\frac{T}{T_F}}$, where $\boxed{T_F = \epsilon_F/k_B}$ is the Fermi temperature
+            \item $C_{el}\propto T$ at \textcolor{red}{low} $T$
+        \end{itemize}
+    \item At low $T$, $C_{tot}=C_{el}+C_{ph} = \gamma T+\beta T^3$
+    \item Electron pressure in metals is $P=-\pdv{U}{V}=\frac{2}{5}n\epsilon_F$ (`smearing' of Fermi-Dirac distribution ignored) (\mylabel{thm:electron_pressure}{Proof}) ($n=N/V$)
+    \item The isothermal bulk modulus $K_T=-V\left(\pdv{P}{V}\right)_T=\frac{2}{3}n\epsilon_F$; contribute to a big part of bulk modulus $K_{exp}$; electron gas - short range, coulomb force between electrons and lattice - long range
+    \item Adding mean path length/mean time by adding rate of collision, like this: $\frac{1}{l}=\frac{1}{l_1}+\frac{1}{l_2}$, $\frac{1}{\tau}=\frac{1}{\tau_{phonon}}+\frac{1}{\tau_{defect}}$
+    \item Probability of no collision in a time $t$ is $\boxed{e^{-t/\tau}}$
+    \item EoM for mean collison interval $\tau$ is $\boxed{m^*\left(\dv{\vb{v}}{t}\textcolor{red}{+\frac{\vb{v}}{\tau}}\right) = -e\vb{E}-e\vb{v}\times\vb{B}}$ (an additional \textcolor{red}{damping/drag} term $\frac{m^*\vb{v}}{\tau}$)
+    \item \textit{Drift velocity} $\boxed{m^*\frac{\vb{v}_{drift}}{\tau}=-e\vb{E}}$
+    \item \textit{Electron \textcolor{red}{mobility}} $\boxed{\mu=\frac{v_{drift}}{E}=\frac{e\tau}{m^*}}$
+    \item \textit{Current density} $\vb{j}=n(-e)\vb{v}_{drift}=\frac{ne^2\tau}{m^*}\vb{E}=ne\mu\vb{E}=\sigma\vb{E}$, where $\boxed{\sigma=\frac{ne^2\tau}{m^*}=ne\mu}$ is conductivity.
+    \item Optical reflectivity\begin{itemize}
+        \item Optical frequency $\omega\gg\tau$, \textcolor{red}{scattering ignored}.
+        \item (Same as Phys B plasma, $m^*$ instead of $m_e$)
+        \item $\epsilon=1+\chi=1+\frac{P}{\epsilon_0E}=1-\frac{Ne^2}{\epsilon_0 m^*\omega^2}=1-\frac{\omega_p^2}{\omega^2}$, the plasma frequency is $\omega_p=\frac{Ne^2}{\epsilon_0m^*}$, \where{$N$ is unit volume electron density}
+        \item $n=\sqrt{\epsilon}$, below $\omega_p$, $n$ is imaginary, metal is reflective; above $\omega_p$, metal is transparent. Examples:
+            \begin{center}
+                \includegraphics*[width=0.4\linewidth]{cmp_metal_reflectivity.png}
+            \end{center}
+            ($\omega_p$ normally in UV range; for transparent metals (Indium tin oxide) near IR range, so visible light passes through)
+        \end{itemize}
+    \item Resistivity\begin{itemize}
+            \item Only electron states near the Fermi surface can be scattered. These are the only filled states with empty states at slightly different energies.
+            \item Electrons moved by $\vb{E}$ according to $\dv{\vb{k}}{t}=-\frac{1}{\hbar}e\vb{E}$
+            \item Then scatter backwards due to phonons and defects. In average we have drift velocity $m^*v_{drift}=\hbar\Delta k$
+            \item $\boxed{\frac{1}{\tau} = \frac{1}{\tau_{phonons}}+\frac{1}{\tau_{defects}}}$ (Matthiessens's rule)
+            \item At high temperatures, \textcolor{red}{No. phonons $\propto T$}, $\tau_{phonons}\ll\tau_{defects}$, $R\propto T$
+            \item At low temperatures, $\tau_{phonons}\gg\tau_{defects}$, \textbf{offset} \textcolor{red}{independent of $T$} for different conductors
+                \begin{center}
+                    \includegraphics*[width=0.36\linewidth]{cmp_R_vs_T.png}
+                \end{center}
+        \end{itemize}
+    \item Thermal conductivity due to electrons ($\kappa_{el}$)\begin{itemize}
+        \item $\kappa_{el}=\frac{1}{3}C_{el}\langle c\rangle l$
+        \item $\langle c\rangle=v_F$ (only electrons near Fermi surface are excited/moved)
+        \item $l=v_F\tau$
+        \item $T_F = \epsilon_F/k_B = \frac{m^*v_F^2}{2k_B}$
+        \item $\kappa_{el} = \frac{1}{3}\left(\frac{\pi^2}{2}nk_B\frac{T}{T_F}\right)v_Fl = \frac{1}{3}\frac{\pi^2}{2}nk_B\frac{T}{m^*v_F^2/2k_B}v_F^2\tau = \boxed{\frac{\pi^2nk_B^2T\tau}{3m^*}}$
+        \item \fbox{At room temperature}, $\kappa_{electron}$ much larger (100x) than $\kappa_{phonon}$, thermal conductivity of metal $\gg$ insulators
+        \item $\tau\propto 1/T$, $k_{el}$ roughly constant with $T$
+        \item \fbox{At high temperature, $\kappa_{phonon}$ is dominant, $\kappa_{el}$ is constant} ($\tau\propto1/T$ at high temp)
+        \item \begin{tabular}{|Sc|c|c|}
+            \hline
+            $\kappa\propto$, thermal conductivity & photon & electron\\\hline
+            low temp & $T^3$ & $T$\\\hline
+            high temp & $1/T$ & $1$\\\hline
+        \end{tabular}
+    \end{itemize}
+    \item Wiedemann-Franz Law\begin{itemize}
+            \item A experimental observation, at not too low temperatures, $\frac{\kappa}{\sigma}=LT$, where $L$ is teh Lorenz number
+            \item $\frac{\kappa}{\sigma} = \frac{\pi^2k_B^2nT\tau/3m^*}{ne^2\tau/m^*} = \frac{\pi^2}{3}\left(\frac{k_B}{e}\right)^2T$
+            \item Theoretical values of $L = 2.45\times 10^{-8}\mathrm{W\Omega K^{-2}}$
+            \item \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|}
+                        \hline
+                        Element & Ag & Au & Cd & Cu & Ir & Mo & Pb & Pt & Sn & W\\\hline
+                        $L/\times10^{-8}\mathrm{W\Omega K^{-2}}$ & 2.31 & 2.35 & 2.42 & 2.23 & 2.49 & 2.61 & 2.47 & 2.51 & 2.52 & 3.04\\\hline
+                  \end{tabular}
+            \item A strong support for the free electron model
+        \end{itemize}
+    \item Hall effect\begin{itemize}
+            \item \includegraphics*[width=0.4\linewidth]{cmp_hall_effect.png}
+            \item $\vb{f} = m^*\dv{v_{drift}}{t} = -e\vb{E}_H + (-e)\vb{v}_{drift}\times\vb{B} = 0$, $\vb{j}=n(-e)\vb{v}_{drift}$, where $n$ is the number of free electron density
+            \item $\vb{E}_H = \vb{B}\times\vb{v}_{drift} = -\frac{1}{ne}\vb{B}\times\vb{j} = R_H\vb{B}\times\vb{j}$
+            \item $\boxed{R_H = \frac{E}{B} = \frac{1}{nq}=-\frac{1}{ne}}$
+            \item The number of electrons per atom $\frac{n}{n_{atom}}=-\frac{1}{n_{atom}e R_H}$
+            \item \begin{tabular}{|c|c|c|c|c|c|c|}\hline
+                    Element & Na & K & Mg & Al & Be & Cd\\\hline
+                    $n/n_{atom}$ & 0.9 & 1.1 & 1.5 & 3.5 & -0.2 & -2.2\\\hline
+                  \end{tabular}
+            \item Negative values, free electron model \textcolor{red}{failed}
+        \end{itemize}
+\end{enumerate}
+
+\section*{The Nearly free electron model}
+\begin{enumerate}
+    \item Periodic potential as a series $V(x)=\sum_{n=-\infty}^{\infty}V_n\cos(nG_1x)$
+    \item \textbf{Bloch's theorem}: the wavefunction of an electron with wavevector $k$ is $\boxed{\vb{\psi}_{\vb{k}}(\vb{r})=u_{\vb{k}}(\vb{r})e^{i\vb{k}\cdot\vb{r}}}$ where $\vb{u}_{\vb{k}}(\vb{r})$ has the periodicity of the potential
+    \item Bloch's theorem shows that $\vb{k}$ and $\vb{k+G}$ describes the exact the same thing (\href{https://physics.stackexchange.com/questions/243946/physical-meaning-of-crystal-momentum}{link})\newline
+            \includegraphics*[width=0.6\linewidth]{cmp_k&k+G.png}
+    \item In 1D lattice with period $a$ and total length $A$, $u_k(x)=\sum_{-\infty}^{\infty}C_{k,n}\frac{1}{\sqrt{A}}e^{inG_1x}$, $G_1=\frac{2\pi}{a}$
+    \item $\psi_k(x) = u_k(x)e^{ikx} = \sum_{-\infty}^{\infty}C_{k,n}\frac{1}{\sqrt{A}}e^{i(nG_1+k)x} = \boxed{\sum_{-\infty}^{\infty}C_{k,n}\ket{\phi_{k,n}}}$, $\boxed{\ket{\phi_{k,n}}=\frac{1}{\sqrt{A}}e^{i(k+nG_1)x}}$
+    \item \begin{align*}
+            \hat{H}\psi(x) &= \epsilon\psi(x)\\
+            \sum_{m}C_{k,m}\hat{H}\ket{\phi}_{k,m} &= \epsilon\sum_p C_{k,p}\ket{\phi_{k,p}}\\
+            \sum_m C_{k,m}\bra{\phi_{k,n}}\hat{H}\ket{\phi_{k,m}} &= \sum_m H_{nm}C_{k,m} = \epsilon C_{k,n}\\
+            \underline{\vb{H}}\vb{C} &= \epsilon\vb{C}\\
+            (\underline{\vb{H}}-\epsilon\vb{I})\vb{C} &= 0
+        \end{align*}
+    \item \emph{2 states approximation}\begin{itemize}
+            \item Small potential $\implies$ great central basis-state contribution
+            \item \includegraphics*[width=0.8\linewidth]{cmp_2_states_appro.png}
+            \item $\psi_k(x)\approx C_{k,0}\ket{\phi_{k,0}}+C_{k,-1}\ket{\phi_{k,-1}}$
+            \item \includegraphics*[width=0.8\linewidth]{cmp_1d_electron_basis.png}
+            \item For small $k$, $\psi_k(x)\sim\ket{\phi_{k,0}}$
+            \item \includegraphics*[width=0.8\linewidth]{cmp_2_states_large_k.png}
+            \item For large $k$, $k\approx G_1/2$. \begin{align*}
+                    \psi_+(x) &= \frac{1}{2}(\ket{\phi_{G_1/2}}+\ket{\phi_{-G_1/2}})\propto\cos\left(\frac{\pi}{a}x\right)\\
+                    \psi_-(x) &= \frac{1}{2}(\ket{\phi_{G_1/2}}-\ket{\phi_{-G_1/2}})\propto\sin\left(\frac{\pi}{a}x\right)
+                \end{align*}
+        \end{itemize}
+    \item \begin{align*}
+            H_{nm} &= \bra{\phi_{k,n}}\hat{H}\ket{\phi_{k,m}}\\
+                   &= \int_0^A\left(\frac{1}{\sqrt{A}}e^{-i(nG_1+k)x}\right)\left(-\frac{\hbar^2}{2m_e}\pdv[2]{x}+V(x)\right)\left(\frac{1}{\sqrt{A}}e^{i(mG_1+k)x}\right)\dd x\\
+                   &= \frac{1}{A}\int_0^A e^{-inG_1x}\frac{\hbar^2(mG_1+k)^2}{2m_e}e^{imG_1x}\dd x+\frac{1}{A}\int_0^A e^{-i(nG_1+k)x}\sum_{p}\frac{V_p}{2}(e^{-ipG_1x}+e^{ipG_1x})e^{i(mG_1+k)x}\dd x\\
+                   &= \frac{\hbar^2(mG_1+k)^2}{2m_e}\delta_{n,m}+\sum_{p=-\infty}^{\infty}\frac{V_p}{2}(\delta_{n,m+p}+\delta_{n,m-p})
+        \end{align*}
+    \item For \textit{2 states approximation}\begin{itemize}
+            \item $\psi_k(x)=C_{k,0}\ket{\phi_{k,0}}+C_{k,-1}\ket{\phi_{k,-1}}$
+            \item Let $V_0=0$, so $H_{00}=E_{k,0}=\frac{\hbar^2k^2}{2m_e}$, $H_{\overline{1}\overline{1}}=E_{k,-1}=\frac{\hbar^2(k-G_1)^2}{2m_e}$, $H_{0\overline{1}}=H_{\overline{1}0}=\frac{V_1}{2}$
+            \item $\begin{pmatrix}H_{00} & H_{0\overline{1}}\\H_{\overline{1}0} & H_{\overline{1}\overline{1}} \end{pmatrix}\begin{pmatrix}C_{k,0}\\C_{k,\overline{1}}\end{pmatrix}=
+                    \begin{pmatrix}E_{k,0} & V_1/2\\V_1/2 & E_{k,-1} \end{pmatrix}\begin{pmatrix}C_{k,0}\\C_{k,\overline{1}}\end{pmatrix}=
+                    \epsilon_k \begin{pmatrix}C_{k,0}\\C_{k,\overline{1}}\end{pmatrix}$
+            \item Solve for eigenvalues $\epsilon_k=\frac{1}{2}(E_{k,-1}+E_{k,0})\pm\sqrt{\frac{1}{4}(E_{k,-1}-E_{k,0})^2+\left(\frac{V_1}{2}\right)^2}$
+            \item Graph of $\epsilon_k$, $E_{k,-1}$, $E_{k,0}$, band gap at $k=G_1/2$ is $\epsilon_g = V_1$ (according to equation)\newline
+                    \includegraphics*[width=0.5\linewidth]{cmp_energy_eigenvalues.png}
+            \item Now consider more than 2 states, states further away with more $G$ offset will fall inside Brillouin zone\newline
+                    Note that the \fbox{band gap at $k=G_1/2$ are $\epsilon_g=V_1,V_2,V_3,\ldots$}\newline
+                    The min and max of adjacent bands are at the same $k=G_1/2$, therefore we have \emph{direct band gaps}.\newline
+                    \includegraphics*[width=0.5\linewidth]{cmp_band_structure.png}
+        \end{itemize}
+    \item To form current, electrons need to move, so they must be in \emph{partially filled bands}\begin{itemize}
+            \item In $k$ space electrons separated by $2\pi/A$ (they're standing waves)
+            \item 1st Brillouin zone's width $2\pi/a$
+            \item \fbox{No. states/energy bands in a zone \textcolor{red}{$A/a=N$}}
+            \item Electron has two spins, \textcolor{red}{2} electrons in each $k$-point
+            \item Monovalent - $N$ electrons, 1st state half filled, \textbf{conductor} (electrons near Fermi surface have nearby empty $k$-points to move to); Divalent - $2N$ electrons, 1st state fully filled, insulator (electrons need to overcome $\epsilon_g$, band gap energy to conduct)
+            \item Filling in electrons in 1D\newline
+                    \includegraphics*[width=0.7\linewidth]{cmp_fill_electrons_1D.png}
+        \end{itemize}
+
+    \item \href{https://www.youtube.com/watch?v=rJOVGDWoIOc&t=332s}{2D Fermi surfaces} allow divalent elements to be conductors. Let's fill electrons from lowest energy for 0 potential, weak $V_1$ and strong $V_1$.\newline
+        Monovalent:\newline
+            \includegraphics*[width=0.8\linewidth]{cmp_Fermi_surface_2d.png}\begin{itemize}
+            \item If $V_1=0$, state energy is quadratic, Fermi surface is a cirlce. ($N$ states each contain 2 electrons max, $N$ electrons because monovalent, circle area is half square area ($(2\pi/a)^2/2 = \pi k_F^2$))
+            \item If $V_1\neq 0$ and small, parts near edge filled more because state energy there is lower than quadratic, as shown here:\newline
+                \includegraphics*[width=0.8\linewidth]{cmp_Fermi_surface_2d_reason.png}
+            \item If $V_1$ is big, more dramatic
+        \end{itemize}
+
+        Divalent:\newline
+            \includegraphics*[width=0.8\linewidth]{cmp_Fermi_surface_2d_divalent.png}
+            \begin{itemize}
+                \item $V_1=0$, parts outside 1st BZ, fold back like in 4th figure (\emph{conduction bands}); parts inside are \emph{valency bands}
+                \item $V_1\neq 0$ and small, less in higher state, more in lower state
+                \item $V_1$/band gap very large, all electrons in 1st state
+            \end{itemize}
+        
+
+    \item \href{https://www.phys.ufl.edu/fermisurface/}{3D Fermi surfaces website}
+    \item \includegraphics*[width=0.8\linewidth]{cmp_formation_of_current.png}
+    \item \includegraphics*[width=0.9\linewidth]{cmp_Bloch_oscillation.png}
+    \item Holes are ``absence of electrons''. $\epsilon_h=-\epsilon_e$, $k_h=-k_e$
+    \item \textbf{Effective mass} as in classical equations\begin{itemize}
+            \item $f=m^*\dv{v}{t}$
+            \item $f=\dv{\hbar k}{t}=\hbar\dv{k}{t}$
+            \item $v=v_g=\dv{\omega}{k}$
+            \item $\epsilon=\hbar\omega$
+            \item $f=m^*\dv{t}\dv{\omega}{k}=\dv[2]{\omega}{k}\dv{k}{t}=\frac{1}{\hbar}\dv[2]{\epsilon}{k}\dv{k}{t}$
+            \item $\boxed{m^*=\hbar^2/\dv[2]{\epsilon}{k}}$
+            \item Measurements: Hall effect, Cyclotron resonance
+        \end{itemize}
+    \item For an almost full ground state, curvature $\dv[2]{\epsilon}{k}<0$. $\boxed{m^*<0}$\newline
+        \includegraphics*[width=0.5\linewidth]{cmp_almost_full_ground_state.png}
+    \item $\epsilon_h=-\epsilon_e$, $k_h=-k_e$
+    \item 2D holes\newline
+        \includegraphics*[width=0.5\linewidth]{cmp_holes_2d.png}
+\end{enumerate}
+
+\section*{Semiconductors}
+\begin{enumerate}
+    \item n-type doping (P) creates electrons, p-type doping (Al) creates holes\newline
+        \includegraphics*[width=0.75\linewidth]{cmp_doping.png}\newline
+        Straight line is energy state for 'bound' state/Hydrogen atom style, $E_n=-\frac{m^*_e e^4}{2(4\pi n\epsilon_r\epsilon_0\hbar)^2}$, $r_n=\frac{4\pi\epsilon_r\epsilon_0 n^2\hbar^2}{m^*_e e^2}$
+        ($\epsilon_r$ is the relative permittivity)
+    \item \includegraphics*[width=0.7\linewidth]{cmp_mu_doped_semiconductor.png}
+    \item \includegraphics*[width=0.8\linewidth]{pn_junction.png}
+        \begin{itemize}
+            \item Majority carrier: $e^-$ in n, holes in p
+            \item Forward bias: force majority carriers towards junction, shrinks depletion zone
+            \item Without electric potential, chemical potential of n-type $\mu_n$ is just below conduction band;\\
+                chemical potential of p-type $\mu_p$ is just above valence band
+            \item \textcolor{red}{$\bigstar$}Chemical potential/electrochemical potential/Fermi level of $e^-$/n-type is $\mu_n-eV$; of hole/p-type is $\mu_p+eV$ (so does energy bands)
+            \item Depletion zone creates a potential difference (\textcolor{red}{contact potential/built-in potential}), balancing the $\mu$ ($\Delta V=e(\mu_n-\mu_p)$)
+            \item Generation current - $e^-$ moves from valence band to conduction band (\textcolor{red}{thermal excitation} or \textcolor{red}{light absorption}).
+                Depends on temperature and band gap, independent of voltage applied
+            \item Recombination current - annihilation of holes and electrons, energy emitted as light (LED) or heat.
+        \end{itemize}
+    \item \begin{itemize}
+        \item For $\epsilon\gg\mu$, $p_0(\epsilon) = \frac{1}{\exp[(\epsilon-\mu)/k_B T]+1} \approx \exp(-(\epsilon-\mu)/k_BT)$
+        \item Apply voltage $V$ changes $\mu$ from $\mu_n$ to $\mu_n+eV$, $p_V(\epsilon)\approx \exp[-(\epsilon-(\mu_n+eV))/k_BT] = p_0(\epsilon)\exp(eV/k_BT)$
+        \item Chemical potential difference \textbf{maintained}, until battery is drained
+        \item The generation current $I_0$ balances the recombination current when $V=0$
+        \item If $V\neq 0$, the generation current is still $I_0$; recombination current is changed to $I_0\exp(eV/k_BT)$
+        \item $\boxed{I=I_0(\exp[eV/k_BT]-1)}$
+        \item \includegraphics*[width=0.4\linewidth]{cmp_semiconductor_IV.png}
+    \end{itemize}
+    \item Zener breakdown: large \textbf{reverse} bias, raises valence band for p-type to above conduction band in n-type, electron can tunnel through to lower its energy\newline
+        \includegraphics*[width=0.6\linewidth]{cmp_Zener_breakdown.png}
+    \item Avalanche breakdown: \begin{itemize}
+            \item strong reverse bias
+            \item thermally excited carriers gain energy
+            \item create more electron-hole pairs (avalanche)
+            \item form large current
+            \item release a lot of heat (possiblely break the device)
+            \item Usage: protection device, single photon detectors (designed to trigger avalanche with a photon)
+        \end{itemize}
+    \item LED\begin{itemize}
+            \item Forward bias
+            \item Energy released when carriers \emph{recombine}
+            \item In most cases, for a \emph{direct} band gap, energy becomes a photon
+            \item If band gap indirect, energy becomes heat
+            \item Photon wavelength controlled by band-gap
+            \item Energy efficient lighting
+            \item \includegraphics*[width=0.6\linewidth]{cmp_direct_indirect_band_gap.png}
+        \end{itemize}
+    \item Semiconductor laser\begin{itemize}
+            \item Coherent LED
+            \item Normal population: Boltzmann distribution, higher energy less populated
+            \item \textbf{Population inversion}: Higher energy states more populated, non-equilibrium `pumped' constantly
+            \item \textcolor{red}{Strong forward} bias
+            \item $\mu$ \textbf{above} band in n-type, \textbf{below} band in p-type, caused by \textcolor{red}{ very heavy doping}
+            \item Electrons \textbf{injected} from n-type side to maintain populated inversion
+            \item \textbf{Stimulated emission}: one photon knocks off an electron, to produce two photons with the same energy. Fully derivation available if you learn QED.
+            \item \includegraphics*[width=0.4\linewidth]{cmp_laser.png}
+        \end{itemize}
+    \item Solar cell\begin{itemize}
+            \item Reverse of LED
+            \item Equivalent to a current source, a diode and a shunt resistor (resistive leakage)
+            \item \includegraphics*[width=0.6\linewidth]{cmp_solar_cell.png}
+        \end{itemize}
+    \item npn transistor, op-amps, silicon wafer and lithographics
+\end{enumerate}
+
+\section*{Proofs}
+\begin{enumerate}
+    \item \myref{thm:diffrac_proof} $\delta(a) = \frac{1}{2\pi}\int_{-\infty}^{\infty}e^{ipa}\dd p$
+    
+        $F = \sum_G\int n_G e^{i(\vb{G}-\Delta\vb{k})\cdot\vb{r}}\dd V = 2\pi\sum_G n_G\delta(\vb{G}-\Delta\vb{k})$
+
+    \item \myref{thm:phonon_disper} 
+        \begin{center}
+            \includegraphics*[width=0.4\linewidth]{cmp_phonon_dipersion_derivation.png}
+        \end{center}
+
+        Assume \begin{itemize}
+            \item monoatomic
+            \item cyclic structure $u_{N+1}=u_1$
+            \item simple spring between \textbf{adjacent} atoms $m\ddot{u}_n = k(u_{n+1}-u_n)-k(u_n-u_{n-1})=k(u_{n+1}+u_{n-1}-2u_n)$
+            \item symmetry thus constant phase differece $u_{n+1}=u_n e^{i\delta}$, $\delta=qa$
+            \item Trial solution $u_n = ue^{-i\omega t}$
+        \end{itemize}
+        \begin{align*}
+            -m\omega^2ue^{-i\omega t}&=k(e^{i\delta}+e^{-i\delta}-2)ue^{-i\omega t}\\
+            m\omega^2 &= 2k(1-\cos\delta)\\
+            \omega^2 &= \frac{4k}{m}\sin^2\left(\frac{\delta}{2}\right)
+        \end{align*}
+
+        Consider next neighbour:
+        $\omega^2=\frac{4}{m}\left(k_1\sin^2\left(\frac{qa}{2}\right)+k_2\sin^2\left(\textcolor{red}{qa}\right)\right)$ (linear, add solutions)
+        \begin{center}
+            \includegraphics*[width=0.95\linewidth]{cmp_phonon_next_nea_nei.png}
+        \end{center}
+
+    \item \myref{thm:diatomic_dispersion} Diatomic lattice:
+        \begin{center}
+            \includegraphics*[width=0.4\linewidth]{cmp_phonon_diatomic.png}
+        \end{center}
+        \begin{minipage}{0.75\linewidth}
+        \begin{itemize}
+            \item \begin{align*}
+                m_A\ddot{u}_{2n} &= k(u_{2n+1}+u_{2n-1}-2u_{2n})\\
+                m_B\ddot{u}_{2n+1} &= k(u_{2n+2}+u_{2n}-2u_{2n+1})
+            \end{align*}
+            \item Trial solutions\begin{align*}
+                u_{2n} &= U_1e^{i(2nqa-\omega t)}\\
+                u_{2n+1} &= U_2e^{i((2n+1)qa-\omega t)}
+            \end{align*}
+            \item $$\begin{cases}
+                    (m_A\omega^2-2k)U_1+2k\cos(qa)U_2 &= 0\\
+                    2k\cos(qa)U_1+(m_B\omega^2-2k)U_2 &= 0
+                \end{cases}$$ has zero determinant (to be consistent)
+            \item $\omega^2=\frac{k}{m_A m_B}\left[(m_A+m_B)\pm\sqrt{(m_A+m_B)^2-4m_Am_B\sin^2(qa)}\right]$
+        \end{itemize}
+        \end{minipage}
+        \begin{minipage}{0.23\linewidth}
+            \begin{center}
+                \captionof*{figure}{Some intuition with backfolding}
+                \includegraphics*[width=1.2\linewidth]{cmp_diatomic_backfolding.png}
+            \end{center}
+        \end{minipage}
+
+    \item \myref{thm:thermal_conductiv}\begin{itemize}
+            \item Net phonon flow in $x$ direction $\frac{1}{2}n\langle|v|\rangle$, $n$ is phonon density
+            \item $c_{ph}$ heat capacity of a phonon; heat flux from $T$ to $T+\Delta T$ is $j_{T\rightarrow T+\Delta T}=-\frac{1}{2}n\langle|v_x|\rangle c_{ph}\Delta T$ ($-$ve sign because heat flow from high to low $T$)
+            \item Similarly heat flux from $T+\Delta T$ to $T$ is $j_{T+Delta T\rightarrow T}=-\frac{1}{2}n\langle|v_x|\rangle c_{ph}\Delta T$ (phonons travelling in both directions move heat in the same direction)
+            \item Mean free path - distance between two collisions (in which phonons change its temperature); Between two collisions, $\Delta T=l\pdv{T}{x} = \pdv{T}{x}|v_x|\tau$, where $\tau=l/|v_x|$
+            \item $j_v = -n\langle |v_x|\rangle c|v_x|\tau\pdv{T}{x} = -n\langle v_x^2\rangle c\tau\pdv{T}{x} = -\frac{1}{3}C\langle v^2\rangle\tau \pdv{T}{x} = -\frac{1}{3}C\langle v\rangle l\pdv{T}{x} = -\kappa\pdv{T}{x}$, where $\langle v\rangle$ is the average speed.
+        \end{itemize}
+        The above is coincidental (or 1D), real 3D proof here (without the weird $\langle v\rangle l=\langle v^2\rangle\tau$)\newline
+        Use $z$-axis instead of $x$\newline
+        \begin{minipage}{0.3\linewidth}
+            \includegraphics*[width=\linewidth]{cmp_thermal_conductivity.png}
+        \end{minipage}
+        \begin{minipage}{0.69\linewidth}
+            \begin{itemize}
+                \item sphere of radius $v$
+                \item $\langle c\rangle=\int_0^\infty vf(v)\dd v$, where $f(v)$ is the velocity distribution
+                \item $v_z$ for phonons on the ring is $v\cos\theta$
+                \item num of phonons with this $v_z$ is $nf(v)\dd v\cdot \frac{2\pi\sin\theta\dd\theta}{4\pi}$
+                \item heat tranferred by a phonon $-c_{ph}\pdv{T}{z}l\cos\theta$
+                \item \begin{align*}j &= -\frac{1}{2}c_{ph}nl\pdv{T}{z}\int_0^\pi\sin\theta\cos^2\theta\dd\theta \int_0^\infty vf(v)\dd v \\ &= -\frac{1}{3}c_{ph}nl\langle c\rangle\pdv{T}{z}\end{align*}
+            \end{itemize}
+        \end{minipage}
+    \item \myref{thm:Fermi_Dirac}\begin{itemize}
+        \item Entropy is $S_0 = k_B\ln\Omega_0$ in ground state (no electron), $\Omega_0$ is the number of reservoir configurations
+        \item Transfer 1 electron of energy $\epsilon$ to this state, $\dd U=T\dd S+\mu\dd N$, no $-p\dd V$ work is done, $\dd N=1,\dd U=\epsilon$, $\dd S=\frac{\epsilon}{T}-\frac{\mu}{T}$
+        \item $S_0+\dd S=k_B\ln\Omega$, $\ln\Omega-\ln\Omega_0=-\frac{\epsilon-\mu}{k_BT} = \ln(\Omega/\Omega_0)$
+        \item Average number of electrons in a state $p_F(\epsilon)=\frac{0\cdot\Omega_0+1\cdot\Omega}{\Omega+\Omega_0} = \frac{1}{1+\Omega_0/\Omega} = \frac{1}{1+\exp((\epsilon-\mu)/k_BT)}$
+    \end{itemize}
+    \item \myref{thm:electronic_heat_capacity}\begin{center}
+            \includegraphics*[width=0.6\linewidth]{cmp_Fermi_distri_proof.png}
+        \end{center}\begin{itemize}
+            \item $U(T) = \int_0^\infty\epsilon g(\epsilon)p_F(\epsilon,T,\mu)\dd\epsilon$
+            \item $\pdv{U}{T}=\int_0^\infty\epsilon g(\epsilon)\pdv{p_F}{T}\dd\epsilon$
+            \item $N = \int_0^{\epsilon_F}g(\epsilon)\dd\epsilon = \int_0^\infty g(\epsilon)p_F\dd\epsilon$, $\pdv{N}{T} = 0 = \int_0^\infty g(\epsilon)\pdv{p_F}{T}\dd\epsilon$
+            \item $\pdv{U}{T} = \pdv{U}{T}-\epsilon_F\cdot 0 = \int_0^\infty(\epsilon-\epsilon_F) g(\epsilon)\pdv{p_F}{T}\dd\epsilon$
+            \item recall that $g(\epsilon)=\frac{3N}{2\epsilon}$
+            \item For small $T$, $\pdv{U}{T} \approx g(\epsilon_F)\int_0^\infty(\epsilon-\epsilon_F)\pdv{p_F}{T}\dd\epsilon$ because $\pdv{p_F}{T}$ looks like a delta function at $\epsilon_F$
+            \item Let $x=\frac{\epsilon-\epsilon_F}{k_BT}$, $\pdv{U}{T} = g(\epsilon_F)\int_{-\epsilon_F/k_BT}^\infty (\epsilon-\epsilon_F)\frac{\epsilon-\epsilon_F}{k_BT^2}\frac{e^x}{(e^x+1)^2}(k_BT\dd x)\approx k_B^2Tg(\epsilon_F)\int_{-\infty}^\infty\frac{x^2e^x}{(e^x+1)^2}\dd x = \frac{1}{3}\pi^2k_B^2Tg(\epsilon_F) = \frac{1}{2\epsilon_F}\pi^2Nk_B^2 T$ (at small $T$, $\frac{-\epsilon_F}{k_B T}\approx-\infty$)
+            \item Define Fermi temperature $T_F = \epsilon_F/k_B$
+        \end{itemize}
+    \item \myref{thm:electron_pressure}\begin{itemize}
+        \item $g(\epsilon)\propto\epsilon^{1/2}$
+        \item $\epsilon_F\propto\left(\frac{N}{V}\right)^{2/3}$
+        \item For each electron $\langle U\rangle=\frac{\int_0^{\epsilon_F}\epsilon g(\epsilon)\dd\epsilon}{\int_0^{\epsilon_F}g(\epsilon)\dd\epsilon} = \frac{3}{5}\epsilon_F$
+        \item For $N$ electrons $\Delta U = -P\Delta V$, $P = \pdv{U}{V}=-\pdv{N\langle U\rangle}{\epsilon_F}\pdv{\epsilon_F}{V} = -\frac{3}{5}N\left(-\frac{2}{3}\frac{\epsilon_F}{V}\right) = \frac{2}{5}n\epsilon_F$
+    \end{itemize}
+\end{enumerate}
+
+\section*{Examples}
+\begin{enumerate}
+    \item Dispersion relations in 3D
+    \begin{center}
+        \includegraphics*[width=0.8\linewidth]{cmp_dispersion_3d_sodium.png}
+    \end{center}
+
+    Or joined together, with the 2nd one flipped
+
+    \begin{center}
+        \begin{minipage}{0.4\linewidth}
+            \includegraphics*[width=0.8\linewidth]{cmp_dispersion_3d_neon.png}
+        \end{minipage}
+        \begin{minipage}{0.4\linewidth}
+            \includegraphics*[width=0.8\linewidth]{cmp_dispersion_3d_neon2.png}
+        \end{minipage}
+    \end{center}
+
+    Neon's (it's FCC) longitudinal mode in $(110)$ not sinusoidal not because of 2nd nearest neighbours, but neighbours $a$ and $\sqrt{2}a$ away in this direction
+    \item 
+\end{enumerate}
+
+\end{document}
